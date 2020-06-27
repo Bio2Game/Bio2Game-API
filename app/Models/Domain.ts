@@ -1,0 +1,30 @@
+import { DateTime } from 'luxon'
+import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+
+import Icon from 'App/Models/Icon'
+
+export default class Domain extends BaseModel {
+  @column({ isPrimary: true })
+  public id: number
+
+  @column()
+  public label: string
+
+  @column()
+  public iconId: number
+
+  @column()
+  public image: string
+
+  @column()
+  public keyswords: string
+
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updatedAt: DateTime
+
+  @hasOne(() => Icon)
+  public icon: HasOne<typeof Icon>
+}
