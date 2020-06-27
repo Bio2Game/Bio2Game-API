@@ -25,7 +25,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('avatar_path').defaultTo(null)
       table.boolean('isAnimator').defaultTo(false)
       table.string('login_source').defaultTo('normal')
-      table.timestamps(true)
+      table.timestamps()
     })
 
     this.schema.createTable('tokens', (table) => {
