@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import {
-  column,
-  beforeSave,
-  BaseModel,
-} from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+
+import Quiz from 'App/Models/Quiz'
+import Comment from 'App/Models/Comment'
+import Party from 'App/Models/Party'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -73,4 +73,31 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
+
+  @hasMany(() => Quiz)
+  public quizs: HasMany<typeof Quiz>
+
+  @hasMany(() => Comment)
+  public comments: HasMany<typeof Comment>
+
+  @hasMany(() => Party)
+  public parties: HasMany<typeof Party>
+
+  @manyToMany(() => User, {
+    pivotTable: 'playersAnimators',
+    localKey: 'id',
+    pivotForeignKey: 'playerId',
+    pivotRelatedForeignKey: 'animatorId',
+    relatedKey: 'id',
+  })
+  public animators: ManyToMany<typeof User>
+
+  @manyToMany(() => User, {
+    pivotTable: 'playersAnimators',
+    localKey: 'id',
+    pivotForeignKey: 'animatorId',
+    pivotRelatedForeignKey: 'playerId',
+    relatedKey: 'id',
+  })
+  public players: ManyToMany<typeof User>
 }
