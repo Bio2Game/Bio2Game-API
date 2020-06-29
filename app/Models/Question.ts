@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 
 import Quiz from 'App/Models/Quiz'
-import User from 'App/Models/User'
 
 export default class Question extends BaseModel {
   @column({ isPrimary: true })
