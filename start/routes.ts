@@ -20,6 +20,19 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.group(() => {
+  Route.get('/', async () => {
+    return 'Bienvenue sur l\'api privé de Bio2Game, vous n\'avez rien a faire ici :c'
+  })
+
+  Route.group(() => {
+    Route.get('/user', 'AuthController.user')
+    Route.post('/register', 'AuthController.register')
+    Route.post('/login', 'AuthController.login')
+    Route.post('/logout', 'AuthController.logout')
+  }).prefix('/auth')
+
+  Route.get('*', async () => {
+    return 'Route introuvable'
+  })
+}).prefix('/api')
