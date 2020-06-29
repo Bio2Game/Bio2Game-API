@@ -9,6 +9,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import { OrmConfig } from '@ioc:Adonis/Lucid/Orm'
 import Application from '@ioc:Adonis/Core/Application'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
+import { LucidModel } from '@ioc:Adonis/Lucid/Model'
 
 const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   /*
@@ -104,6 +105,12 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   |
   */
   orm: {
+    getColumnName: function (_: LucidModel, key: string) {
+      return key
+    },
+    getSerializeAsKey: function (_: LucidModel, key: string) {
+      return key
+    },
   },
 }
 
