@@ -27,10 +27,17 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/user', 'AuthController.user')
+
     Route.post('/register', 'AuthController.register')
     Route.post('/login', 'AuthController.login')
     Route.post('/logout', 'AuthController.logout')
   }).prefix('/auth')
+
+  Route.group(() => {
+    Route.get('/', 'QuizzesController.index')
+
+    Route.post('/create', 'QuizzesController.create')
+  }).prefix('/quiz')
 
   Route.get('*', async () => {
     return 'Route introuvable'
