@@ -18,36 +18,20 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'api',
+  guard: 'web',
   list: {
     /*
     |--------------------------------------------------------------------------
-    | OAT Guard
+    | Web Guard
     |--------------------------------------------------------------------------
     |
-    | OAT (Opaque access tokens) guard uses database backed tokens to authenticate
-    | HTTP request. This guard DOES NOT rely on sessions or cookies and uses
-    | Authorization header value for authentication.
-    |
-    | Use this guard to authenticate mobile apps or web clients that cannot rely
-    | on cookies/sessions.
+    | Web guard uses classic old school sessions for authenticating users.
+    | If you are building a standard web application, it is recommended to
+    | use web guard with session driver
     |
     */
-    api: {
-      driver: 'oat',
-
-      /*
-      |--------------------------------------------------------------------------
-      | Tokens provider
-      |--------------------------------------------------------------------------
-      |
-      | Uses SQL database for managing tokens.
-      |
-      */
-      tokenProvider: {
-        driver: 'database',
-        table: 'api_tokens',
-      },
+    web: {
+      driver: 'session',
 
       provider: {
         /*
