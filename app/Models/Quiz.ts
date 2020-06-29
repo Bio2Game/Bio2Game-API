@@ -42,9 +42,9 @@ export default class Quiz extends BaseModel {
   @hasMany(() => Question)
   public questions: HasMany<typeof Question>
 
-  @belongsTo(() => Domain, { localKey: 'domainId', foreignKey: 'id' })
+  @belongsTo(() => Domain, { localKey: 'id', foreignKey: 'domainId' })
   public domain: BelongsTo<typeof Domain>
 
-  @belongsTo(() => User, { localKey: 'contributorId', foreignKey: 'id' })
+  @belongsTo(() => User, { localKey: 'id', foreignKey: 'contributorId' })
   public author: BelongsTo<typeof User>
 }
