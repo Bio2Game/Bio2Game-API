@@ -8,16 +8,6 @@ export default class Users extends BaseSchema {
 
     this.schema.dropTable('tokens')
 
-    this.schema.table('api_tokens', (table) => {
-      table.increments('id').primary()
-      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.string('name').notNullable()
-      table.string('type').notNullable()
-      table.string('token', 64).notNullable()
-      table.timestamp('expires_at').nullable()
-      table.timestamp('created_at').notNullable()
-    })
-
     this.schema.table('comments', (table) => {
       table.integer('like').defaultTo(0).unsigned()
       table.integer('dislike').defaultTo(0).unsigned()
@@ -38,8 +28,6 @@ export default class Users extends BaseSchema {
       table.boolean('is_revoked').defaultTo(false)
       table.timestamps()
     })
-
-    this.schema.dropTable('api_tokens')
 
     this.schema.table('comments', (table) => {
       table.dropColumns('like', 'dislike', 'status')

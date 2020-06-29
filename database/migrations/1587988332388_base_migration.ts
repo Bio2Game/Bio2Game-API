@@ -109,7 +109,7 @@ export default class UsersSchema extends BaseSchema {
     })
     this.schema.createTable('responses', (table) => {
       table.increments()
-      table.integer('userId').alter()
+      table.integer('userId')
       table.string('simpleUserId')
       table.integer('responsTimeSpent')
       table.integer('questionId').unsigned().notNullable()

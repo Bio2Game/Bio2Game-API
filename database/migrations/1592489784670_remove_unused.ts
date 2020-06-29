@@ -37,7 +37,6 @@ export default class UsersSchema extends BaseSchema {
     this.schema.dropTable('status')
 
     this.schema.table('comments', (table) => {
-      table.dropForeign(['userId', 'responsId', 'questionId'])
       table.renameColumn('comment', 'content')
       table.renameColumn('responsId', 'parentId')
       table.dropColumn('uniqName')
@@ -68,8 +67,6 @@ export default class UsersSchema extends BaseSchema {
       table.integer('currentGeolocalisationID')
       table.string('account_status').defaultTo('active')
     })
-
-    this.schema.dropTable('api_tokens')
 
     this.schema.table('domains', (table) => {
       table.date('activationDate')
