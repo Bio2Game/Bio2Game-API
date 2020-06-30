@@ -69,8 +69,6 @@ export default class AuthController {
         },
       })
 
-      console.log(email, password)
-
       await auth.attempt(email, password, !!remember)
 
       response.status(200).json({
