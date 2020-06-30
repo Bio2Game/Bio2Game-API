@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, HasMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany, HasMany, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 
 import Question from 'App/Models/Question'
 import Domain from 'App/Models/Domain'
@@ -42,9 +42,9 @@ export default class Quiz extends BaseModel {
   @hasMany(() => Question)
   public questions: HasMany<typeof Question>
 
-  @hasOne(() => Domain)
-  public domain: HasOne<typeof Domain>
+  @belongsTo(() => Domain, { localKey: 'id', foreignKey: 'domainId' })
+  public domain: BelongsTo<typeof Domain>
 
-  @hasOne(() => User)
-  public author: HasOne<typeof User>
+  @belongsTo(() => User, { localKey: 'id', foreignKey: 'contributorId' })
+  public author: BelongsTo<typeof User>
 }
