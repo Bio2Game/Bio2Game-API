@@ -39,6 +39,18 @@ Route.group(() => {
     Route.post('/create', 'QuizzesController.create')
   }).prefix('/quiz')
 
+  Route.group(() => {
+    Route.get('/', 'DomainsController.index')
+
+    Route.post('/create', 'DomainsController.create')
+  }).prefix('/domains')
+
+  Route.group(() => {
+    Route.get('/', 'IconsController.index')
+
+    Route.post('/create', 'IconsController.create')
+  }).prefix('/icons')
+
   Route.get('*', async () => {
     return 'Route introuvable'
   })
