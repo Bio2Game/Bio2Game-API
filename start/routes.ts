@@ -40,6 +40,12 @@ Route.group(() => {
   }).prefix('/quiz')
 
   Route.group(() => {
+    Route.get('/', 'QuestionsController.index')
+
+    Route.post('/create', 'QuestionsController.create')
+  }).prefix('/questions')
+
+  Route.group(() => {
     Route.get('/', 'DomainsController.index')
 
     Route.post('/create', 'DomainsController.create')

@@ -17,7 +17,7 @@ export default class Question extends BaseModel {
   public question: string
 
   @column()
-  public responses: JSON
+  public responses: Object
 
   @column()
   public explication: string
@@ -43,6 +43,6 @@ export default class Question extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Quiz, { localKey: 'questionId', foreignKey: 'id' })
+  @belongsTo(() => Quiz, { localKey: 'id', foreignKey: 'quizId' })
   public quiz: BelongsTo<typeof Quiz>
 }
