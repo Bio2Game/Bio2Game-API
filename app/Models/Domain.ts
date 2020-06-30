@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 
 import Icon from 'App/Models/Icon'
 
@@ -14,7 +14,7 @@ export default class Domain extends BaseModel {
   public iconId: number
 
   @column()
-  public image: string
+  public image?: string
 
   @column()
   public keyswords: string
@@ -25,6 +25,6 @@ export default class Domain extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasOne(() => Icon)
-  public icon: HasOne<typeof Icon>
+  @belongsTo(() => Icon)
+  public icon: BelongsTo<typeof Icon>
 }
