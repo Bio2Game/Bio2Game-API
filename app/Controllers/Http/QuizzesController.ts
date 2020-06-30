@@ -33,15 +33,13 @@ export default class QuizzesController {
         rules.exists({ table: 'users', column: 'id' }),
       ]),
       domainId: schema.number([
-        // rules.exists({ table: 'domains', column: 'id' }),
+        rules.exists({ table: 'domains', column: 'id' }),
       ]),
       language: schema.enum(Object.values(Languages)),
       localisation: schema.string.optional({}, [
         rules.maxLength(255),
       ]),
     })
-
-    console.log(request.all())
 
     try {
       const payload = await request.validate({
@@ -51,6 +49,16 @@ export default class QuizzesController {
           'label.unique': 'Ce nom est déjà utilisé par un autre quiz.',
           'label.maxLength': 'Le nom de votre quiz ne peut pas dépasser {{ maxLength }} caractères.',
           'description.required': 'Veuillez indiquer la description de votre quiz.',
+          'description.maxLength': 'La description de votre quiz ne peut pas dépasser {{ maxLength }} caractères.',
+          'status.required': 'Veuillez indiquer le status de votre quiz.',
+          'url.required': 'Veuillez indiquer l\'url de votre quiz.',
+          'url.regex': 'Veuillez respecter le format de l\'url.',
+          'url.maxLength': 'L\'url de votre quiz ne peut pas dépasser {{ maxLength }} caractères.',
+          'contributorId.required': 'Veuillez renseigner l\'id du contributeur.',
+          'contributorId.exists': 'Ce contributeur n\'existe pas.',
+          'domainId.required': 'Veuillez renseigner l\'id du domaine associé.',
+          'domainId.exists': 'Ce domaine n\'existe pas.',
+          'localisation.maxLength': 'Votre localisation ne peux pas dépasser {{ maxLength }} caractères.',
         },
       })
 
