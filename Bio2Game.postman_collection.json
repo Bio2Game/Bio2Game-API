@@ -202,7 +202,7 @@
 					"formdata": [
 						{
 							"key": "label",
-							"value": "Quiz name",
+							"value": "Quiz name 2",
 							"type": "text"
 						},
 						{
@@ -211,7 +211,7 @@
 							"type": "text"
 						},
 						{
-							"key": "domain_id",
+							"key": "domainId",
 							"value": "1",
 							"type": "text"
 						},
@@ -236,7 +236,7 @@
 							"type": "text"
 						},
 						{
-							"key": "contributor_id",
+							"key": "contributorId",
 							"value": "1",
 							"type": "text"
 						}
@@ -255,6 +255,154 @@
 					"path": [
 						"api",
 						"quiz",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Domains list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3333/api/domains",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3333",
+					"path": [
+						"api",
+						"domains"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Domains create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "label",
+							"value": "Domain name",
+							"type": "text"
+						},
+						{
+							"key": "iconId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "keyswords",
+							"value": "name",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/nicov/Desktop/unnamed.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3333/api/domains/create",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3333",
+					"path": [
+						"api",
+						"domains",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Icons list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3333/api/icons",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3333",
+					"path": [
+						"api",
+						"icons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Icons create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "fun",
+							"type": "text"
+						},
+						{
+							"key": "icon",
+							"type": "file",
+							"src": "/C:/Users/nicov/Desktop/unnamed.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3333/api/icons/create",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3333",
+					"path": [
+						"api",
+						"icons",
 						"create"
 					]
 				}
