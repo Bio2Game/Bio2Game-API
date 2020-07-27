@@ -35,27 +35,40 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/', 'QuizzesController.index')
-
-    Route.post('/create', 'QuizzesController.create')
-  }).prefix('/quiz')
+    Route.get('/:id', 'QuizzesController.show')
+    Route.post('/', 'QuizzesController.store')
+    Route.patch('/:id', 'QuizzesController.update')
+    Route.delete('/:id', 'QuizzesController.delete')
+  }).prefix('/quizzes')
 
   Route.group(() => {
     Route.get('/', 'QuestionsController.index')
-
-    Route.post('/create', 'QuestionsController.create')
+    Route.get('/:id', 'QuestionsController.show')
+    Route.post('/', 'QuestionsController.store')
+    Route.patch('/:id', 'QuestionsController.update')
+    Route.delete('/:id', 'QuestionsController.delete')
   }).prefix('/questions')
 
   Route.group(() => {
     Route.get('/', 'DomainsController.index')
-
-    Route.post('/create', 'DomainsController.create')
+    Route.get('/:id', 'DomainsController.show')
+    Route.post('/', 'DomainsController.store')
+    Route.patch('/:id', 'DomainsController.update')
+    Route.delete('/:id', 'DomainsController.delete')
   }).prefix('/domains')
 
   Route.group(() => {
     Route.get('/', 'IconsController.index')
-
-    Route.post('/create', 'IconsController.create')
+    Route.get('/:id', 'IconsController.show')
+    Route.post('/', 'IconsController.store')
+    Route.delete('/:id', 'IconsController.delete')
   }).prefix('/icons')
+
+  Route.group(() => {
+    Route.get('/', 'UsersController.index')
+    Route.get('/:id', 'UsersController.show')
+    Route.delete('/:id', 'UsersController.delete')
+  }).prefix('/users')
 
   Route.get('*', async () => {
     return 'Route introuvable'
