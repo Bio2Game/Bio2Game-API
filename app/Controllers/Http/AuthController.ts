@@ -102,7 +102,7 @@ export default class AuthController {
       }
       response.status(401).json({
         success: false,
-        messages: error,
+        messages: error.messages,
       })
     }
   }
