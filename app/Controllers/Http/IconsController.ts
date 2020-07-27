@@ -11,7 +11,27 @@ export default class IconsController {
     return { success: true, icons }
   }
 
-  public async create ({ request, response}: HttpContextContract){
+  public async show ({ response, params }: HttpContextContract){
+    try {
+      const icon = await Icon.find(params.id)
+
+      if(!icon) {
+        response.status(404).json({ success: false })
+      }
+
+      return {
+        success: true,
+        icon,
+      }
+    } catch (error) {
+      response.status(422).json({
+        success: false,
+        messages: error.messages,
+      })
+    }
+  }
+
+  public async store ({ request, response}: HttpContextContract){
     const validationSchema = schema.create({
       name: schema.string({ trim: true }, [
         rules.maxLength(250),
@@ -23,7 +43,7 @@ export default class IconsController {
     })
 
     try {
-      const { icon, name } = await request.validate({
+      const { icon: image, name } = await request.validate({
         schema: validationSchema,
         messages: {
           'name.required': 'Veuillez indiquer le nom de l\'icone.',
@@ -33,9 +53,9 @@ export default class IconsController {
         },
       })
 
-      const iconName = `${lodash.snakeCase(name)}.${new Date().getTime()}.${icon.subtype}`
-      await icon.move(Application.publicPath('/images/icons'), { name: iconName })
-      await Icon.create({ reference: icon.fileName })
+      const iconName = `${lodash.snakeCase(name)}.${new Date().getTime()}.${image.subtype}`
+      await image.move(Application.publicPath('/images/icons'), { name: iconName })
+      const icon = await Icon.create({ reference: image.fileName })
 
       return {
         success: true,
@@ -43,6 +63,28 @@ export default class IconsController {
       }
     } catch (error) {
       console.error(error)
+      response.status(422).json({
+        success: false,
+        messages: error.messages,
+      })
+    }
+  }
+
+  public async delete ({ response, params }: HttpContextContract){
+    try {
+      const icon = await Icon.find(params.id)
+
+      if(!icon) {
+        response.status(404).json({ success: false })
+      }
+
+      await icon?.delete()
+
+      return {
+        success: true,
+        icon,
+      }
+    } catch (error) {
       response.status(422).json({
         success: false,
         messages: error.messages,
