@@ -65,6 +65,7 @@ export default class UsersSchema extends BaseSchema {
     this.schema.createTable('questions', (table) => {
       table.increments()
       table.string('label', 30).notNullable()
+      // Profil du joueur 0: informé,  1: consommateur, 2: producteur, 3: expert
       table.integer('profil').notNullable().defaultTo(0)
       table.string('question').notNullable()
       table.json('responses').notNullable()
