@@ -17,9 +17,7 @@ export default class AuthController {
         rules.email(),
         rules.unique({ table: 'users', column: 'email' }),
       ]),
-      password: schema.string({ trim: true }, [
-        rules.confirmed(),
-      ]),
+      password: schema.string({ trim: true }),
     })
 
     try {
@@ -32,7 +30,6 @@ export default class AuthController {
           'email.email': 'Merci de rentrer une adresse email valide.',
           'email.unique': 'Cette adresse email est déjà utilisé.',
           'password.required': 'Veuillez indiquer un mot de passe fort.',
-          'password.confirmed': 'Veuillez confirmer votre mot de passe.',
         },
       })
 
