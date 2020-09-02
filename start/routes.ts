@@ -65,9 +65,9 @@ Route.group(() => {
   }).prefix('/icons')
 
   Route.group(() => {
-    Route.get('/', 'UsersController.index')
-    Route.get('/:id', 'UsersController.show')
-    Route.delete('/:id', 'UsersController.delete')
+    Route.get('/', 'Admin/UsersController.index')
+    Route.get('/:id', 'Admin/UsersController.show')
+    Route.delete('/:id', 'Admin/UsersController.delete')
   }).prefix('/users')
 
   Route.get('*', async () => {
