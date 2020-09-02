@@ -6,6 +6,16 @@ export default class Users extends BaseSchema {
       table.string('remember_me_token').nullable()
     })
 
+    this.schema.createTable('api_tokens', (table) => {
+      table.increments('id').primary()
+      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.string('name').notNullable()
+      table.string('type').notNullable()
+      table.string('token', 64).notNullable()
+
+      table.timestamps()
+    })
+
     this.schema.dropTable('tokens')
 
     this.schema.table('comments', (table) => {
@@ -19,6 +29,8 @@ export default class Users extends BaseSchema {
     this.schema.table('users', (table) => {
       table.dropColumn('remember_me_token')
     })
+
+    this.schema.dropTable('api_tokens')
 
     this.schema.createTable('tokens', (table) => {
       table.increments()
