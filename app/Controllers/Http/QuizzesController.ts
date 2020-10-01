@@ -10,9 +10,9 @@ enum Languages {
 export default class QuizzesController {
   public async index () {
     const quizzes = await Quiz.query()
-      .preload('author').preload('domain').preload('domain', (query) => query.preload('icon')).preload('questions')
+      .preload('author').preload('domain', (query) => query.preload('icon')).preload('questions')
       .where('status', 1).orderBy('updated_at', 'desc')
-    return { success: true, quizzes }
+    return { quizzes }
   }
 
   public async show ({ response, params }: HttpContextContract){
