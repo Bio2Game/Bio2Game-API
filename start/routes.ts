@@ -36,9 +36,6 @@ Route.group(() => {
   Route.group(() => {
     Route.get('/', 'QuizzesController.index')
     Route.get('/:id', 'QuizzesController.show')
-    Route.post('/', 'QuizzesController.store')
-    Route.patch('/:id', 'QuizzesController.update')
-    Route.delete('/:id', 'QuizzesController.delete')
   }).prefix('/quizzes')
 
   Route.group(() => {
@@ -69,6 +66,19 @@ Route.group(() => {
     Route.get('/:id', 'Admin/UsersController.show')
     Route.delete('/:id', 'Admin/UsersController.delete')
   }).prefix('/users')
+
+  Route.group(() => {
+    Route.patch('/', 'UsersController.update')
+  }).prefix('/user').middleware('auth')
+
+  Route.group(() => {
+    Route.group(() => {
+      Route.get('/', 'Contributor/QuizzesController.index')
+      Route.post('/', 'Contributor/QuizzesController.store')
+      Route.patch('/:id', 'Contributor/QuizzesController.update')
+      Route.delete('/:id', 'Contributor/QuizzesController.delete')
+    }).prefix('/quizzes')
+  }).prefix('/contributor').middleware(['auth', 'contributor'])
 
   Route.get('*', async () => {
     return 'Route introuvable'
