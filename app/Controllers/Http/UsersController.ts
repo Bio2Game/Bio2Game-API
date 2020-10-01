@@ -11,41 +11,50 @@ export default class UsersController {
 
   public async update ({ request, response, auth }: HttpContextContract) {
     const validationSchema = schema.create({
-      username: schema.string({ trim: true }, [
-        rules.unique({ table: 'users', column: 'username' }),
+      username: schema.string.optional({ trim: true }, [
+        rules.unique({ table: 'users', column: 'username', whereNot: { 'id': auth.user?.id } }),
       ]),
-      name: schema.string({ trim: true }),
-      email: schema.string({ trim: true }, [
+      name: schema.string.optional({ trim: true }),
+      email: schema.string.optional({ trim: true }, [
         rules.email(),
         rules.unique({ table: 'users', column: 'email', whereNot: { 'id': auth.user?.id } }),
       ]),
       old_password: schema.string.optional({ trim: true }, [
-        rules.exists({ table: 'users', column: 'password'}),
+        rules.exists({ table: 'users', column: 'password' }),
       ]),
       password: schema.string.optional({ trim: true }),
-      sex: schema.number(),
-      birthDate: schema.date(),
-      localisation: schema.string({ trim: true }),
+      sex: schema.number.optional(),
+      birth_date: schema.date.optional(),
+      localisation: schema.string.optional({ trim: true }),
+      website: schema.string.optional({ trim: true }),
+      contributor_mobile: schema.string.optional({ trim: true }),
+      contributor_type: schema.number.optional(),
+      status: schema.number.optional(),
     })
 
     try {
       const payload = await request.validate({
         schema: validationSchema,
         messages: {
-          'username.required': 'Votre pseudo ne peut pas être supprimé.',
           'username.unique': 'Ce pseudo est déjà utilisé.',
-          'email.required': 'Votre adresse email ne peut pas être supprimé.',
           'email.email': 'Merci de rentrer une adresse email valide.',
           'email.unique': 'Cette adresse email est déjà utilisé.',
+          'old_password.exists': 'Le mot de passe est incorect.',
           'password.confirmed': 'Veuillez confirmer votre mot de passe.',
         },
       })
 
-      await User.create(payload)
+      const user = await User.findOrFail(auth.user?.id)
+
+      user.merge(payload)
+
+      await user.save()
+
+      console.log(user.$attributes)
 
       response.status(200).json({
         success: true,
-        message: 'Merci de vous être inscrit !',
+        message: 'Profil mis à jour avec succès',
       })
     } catch (error) {
       console.log(error)
