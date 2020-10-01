@@ -44,7 +44,7 @@ export default class User extends BaseModel {
   public emailContributor: string
 
   @column()
-  public mobileContributor: string
+  public contributorMobile: string
 
   @column()
   public website: string
