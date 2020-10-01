@@ -9,14 +9,20 @@ export default class Users extends BaseSchema {
     this.schema.createTable('api_tokens', (table) => {
       table.increments('id').primary()
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.string('username')
       table.string('name').notNullable()
       table.string('type').notNullable()
       table.string('token', 64).notNullable()
 
-      table.timestamps()
+      table.timestamp('expires_at').nullable()
+      table.timestamp('created_at').nullable()
     })
 
     this.schema.dropTable('tokens')
+
+    this.schema.table('quizzes', (table) => {
+      table.integer('level').notNullable().defaultTo(0)
+    })
 
     this.schema.table('comments', (table) => {
       table.integer('like').defaultTo(0).unsigned()
@@ -41,8 +47,14 @@ export default class Users extends BaseSchema {
       table.timestamps()
     })
 
+    this.schema.table('quizzes', (table) => {
+      table.dropColumn('level')
+    })
+
     this.schema.table('comments', (table) => {
-      table.dropColumns('like', 'dislike', 'status')
+      table.dropColumn('like')
+      table.dropColumn('dislike')
+      table.dropColumn('status')
     })
   }
 }

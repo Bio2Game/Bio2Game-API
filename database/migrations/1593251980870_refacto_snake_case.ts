@@ -6,8 +6,7 @@ export default class Refactos extends BaseSchema {
       table.renameColumn('languageCode', 'language_code')
       table.renameColumn('birthDate', 'birth_date')
       table.renameColumn('contributorType', 'contributor_type')
-      table.renameColumn('emailContributor', 'contributor_email')
-      table.renameColumn('mobileContributor', 'ontributor_mobile')
+      table.renameColumn('mobileContributor', 'contributor_mobile')
       table.renameColumn('isAnimator', 'is_animator')
     })
 
@@ -38,7 +37,6 @@ export default class Refactos extends BaseSchema {
       table.renameColumn('domainId', 'domain_id')
       table.renameColumn('contributorId', 'contributor_id')
     })
-    // this.schema.renameTable('playersAnimators', 'players_animators')
 
     this.schema.table('playersAnimators', (table) => {
       table.renameColumn('playerId', 'player_id')
@@ -64,7 +62,7 @@ export default class Refactos extends BaseSchema {
       table.renameColumn('birth_date', 'birthDate')
       table.renameColumn('contributor_type', 'contributorType')
       table.renameColumn('contributor_email', 'emailContributor')
-      table.renameColumn('ontributor_mobile', 'mobileContributor')
+      table.renameColumn('contributor_mobile', 'mobileContributor')
       table.renameColumn('is_animator', 'isAnimator')
     })
 
@@ -95,8 +93,6 @@ export default class Refactos extends BaseSchema {
       table.renameColumn('domain_id', 'domainId')
       table.renameColumn('contributor_id', 'contributorId')
     })
-
-    // this.schema.renameTable('players_animators','playersAnimators')
 
     this.schema.table('playersAnimators', (table) => {
       table.renameColumn('player_id', 'playerId')
