@@ -25,6 +25,6 @@ export default class Domain extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Icon)
+  @belongsTo(() => Icon, { localKey: 'id', foreignKey: 'iconId' })
   public icon: BelongsTo<typeof Icon>
 }
