@@ -33,6 +33,9 @@ export default class Quiz extends BaseModel {
   @column()
   public localisation: string
 
+  @column()
+  public level: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
