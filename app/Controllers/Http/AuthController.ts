@@ -53,11 +53,10 @@ export default class AuthController {
     const validationSchema = schema.create({
       email: schema.string({ trim: true }, [ rules.email() ]),
       password: schema.string({ trim: true }),
-      remember: schema.string.optional(),
     })
 
     try {
-      const { email, password, remember } = await request.validate({
+      const { email, password } = await request.validate({
         schema: validationSchema,
         messages: {
           'email.required': 'Veuillez entrer votre adresse email.',
@@ -66,12 +65,9 @@ export default class AuthController {
         },
       })
 
-      await auth.attempt(email, password, !!remember)
+      const token = await auth.attempt(email, password)
 
-      response.status(200).json({
-        success: true,
-        message: 'Merci de vous être connecté !',
-      })
+      return token.toJSON()
     } catch (error) {
       if(error.code === 'E_INVALID_AUTH_UID') {
         return response.status(401).json({
@@ -97,9 +93,10 @@ export default class AuthController {
           },
         })
       }
+      console.log(error)
       response.status(401).json({
         success: false,
-        messages: error.messages,
+        messages: error.messages || error,
       })
     }
   }
