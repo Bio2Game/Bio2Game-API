@@ -80,6 +80,10 @@ Route.group(() => {
     }).prefix('/quizzes')
   }).prefix('/contributor').middleware(['auth', 'contributor'])
 
+  Route.group(() => {
+    Route.post('/upload', 'Contributor/ImageController.store')
+  }).middleware(['auth', 'contributor'])
+
   Route.get('*', async () => {
     return 'Route introuvable'
   })
