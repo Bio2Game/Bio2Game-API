@@ -72,7 +72,7 @@ export default class QuizzesController {
       const quiz = await Quiz.find(params.id)
 
       if(!quiz) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       const payload = await request.validate({
@@ -86,9 +86,9 @@ export default class QuizzesController {
         messages: this.validation.messages,
       })
 
-      quiz?.merge(payload)
+      quiz.merge(payload)
 
-      await quiz?.save()
+      await quiz.save()
 
       return {
         success: true,
@@ -107,10 +107,10 @@ export default class QuizzesController {
       const quiz = await Quiz.find(params.id)
 
       if(!quiz) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
-      await quiz?.delete()
+      await quiz.delete()
 
       return {
         success: true,
