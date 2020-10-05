@@ -48,9 +48,6 @@ export default class QuizzesController {
         messages: this.validation.messages,
       })
 
-      //   payload.url = data.label.toLowerCase().normalize('NFKD')
-      // .replace(/[^\x00-\x7F]+/g, '').replace(/[^a-zA-Z0-9]+/g, '-')
-
       const quiz = await Quiz.create(payload)
 
       return {

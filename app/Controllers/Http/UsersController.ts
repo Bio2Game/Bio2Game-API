@@ -50,8 +50,6 @@ export default class UsersController {
 
       await user.save()
 
-      console.log(user.$attributes)
-
       response.status(200).json({
         success: true,
         message: 'Profil mis à jour avec succès',
