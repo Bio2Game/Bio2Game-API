@@ -78,6 +78,11 @@ Route.group(() => {
       Route.patch('/:id', 'Contributor/QuizzesController.update')
       Route.delete('/:id', 'Contributor/QuizzesController.delete')
     }).prefix('/quizzes')
+
+    Route.group(() => {
+      Route.post('/', 'Contributor/QuestionsController.store')
+      Route.patch('/:id', 'Contributor/QuestionsController.update')
+    }).prefix('/questions')
   }).prefix('/contributor').middleware(['auth', 'contributor'])
 
   Route.group(() => {
