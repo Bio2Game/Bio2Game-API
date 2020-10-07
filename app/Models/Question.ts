@@ -32,9 +32,6 @@ export default class Question extends BaseModel {
   public time: number
 
   @column()
-  public language: string
-
-  @column()
   public quizId: number
 
   @column.dateTime({ autoCreate: true })

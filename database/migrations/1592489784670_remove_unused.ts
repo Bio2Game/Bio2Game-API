@@ -28,7 +28,8 @@ export default class UsersSchema extends BaseSchema {
         'natureCode',
         'uniqId',
         'startDate' ,
-        'endDate'
+        'endDate',
+        'language'
       )
     })
 
