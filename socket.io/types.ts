@@ -20,7 +20,6 @@ export interface PartialUser {
   id: number
   username: string
   email: string
-  uuid: number | null
 }
 
 export interface PlayerResponsePayload {
@@ -30,7 +29,6 @@ export interface PlayerResponsePayload {
 }
 
 export interface CreateGamePayload {
-  quizId: number
   name: string
   questions: Question[]
   animatorId: number
@@ -38,7 +36,7 @@ export interface CreateGamePayload {
 
 export interface JoinGamePayload {
   gameId: string
-  user: UserAuthPayload
+  token: string
 }
 
 export interface UserAuthPayload {

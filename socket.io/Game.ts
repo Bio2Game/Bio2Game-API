@@ -1,5 +1,6 @@
 import Party from 'App/Models/Party'
-import Quiz from 'App/Models/Quiz'
+
+import ApiToken from 'App/Models/ApiToken'
 
 import GameManager from './GameManager'
 import Player from './Player'
@@ -17,7 +18,6 @@ export default class Game {
   public id: string
   public name: string
   public status: number = 0
-  public quiz: any
   public currentQuestion: any
   public questions: Question[]
   public currentResponses: null
@@ -31,10 +31,9 @@ export default class Game {
   public pause: boolean
   public party: Party
 
-  constructor (manager: GameManager, name: string, quiz: Quiz, questions: Question[], animatorId: number) {
+  constructor (manager: GameManager, name: string, questions: Question[], animatorId: number) {
     this.id = this.createCode()
     this.name = name
-    this.quiz = quiz
     this.currentQuestion = null
     this.questions = questions
     this.currentResponses = null
@@ -49,9 +48,17 @@ export default class Game {
   }
 
   public async onConnect (socket: Socket, token: string) {
-    const auth = (await AuthToken.query().with('user').with('simpleAuth').where('token', '=', token).first()).toJSON()
+    const auth = await ApiToken.query().preload('user').where('token', token.substring(7)).first()
 
-    const user = auth.user || auth.simpleAuth
+    console.log(auth)
+
+    if(!auth) {
+      return socket.disconnect()
+    }
+
+    const user = auth.user || {
+      username: auth.username,
+    }
 
     if (auth.user && user.id === this.animatorId) {
       if (this.animator) {
@@ -109,7 +116,6 @@ export default class Game {
       })),
       questionsSize: this.questions.length,
       playersSize: this.players.length,
-      quizId: this.quiz.id,
       contributorId: this.animatorId,
       responses: '{}',
       finished: false,
@@ -187,7 +193,6 @@ export default class Game {
       id: this.id,
       name: this.name,
       status: this.status,
-      quiz: this.quiz,
       currentQuestion: this.currentQuestion ? this.currentQuestion.serialize() : null,
       finished: this.finished ? this.finished.serialize() : null,
       questions: this.questions,
