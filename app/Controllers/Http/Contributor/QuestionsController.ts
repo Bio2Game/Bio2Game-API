@@ -55,7 +55,7 @@ export default class QuestionsController {
     } catch (error) {
       response.status(422).json({
         success: false,
-        messages: error.messages,
+        messages: error.messages || error,
       })
     }
   }
@@ -105,6 +105,27 @@ export default class QuestionsController {
     }
   }
 
+  public async delete ({ response, params }: HttpContextContract){
+    try {
+      const question = await Question.find(params.id)
+
+      if(!question) {
+        return response.status(404).json({ success: false })
+      }
+
+      await question.delete()
+
+      return {
+        success: true,
+      }
+    } catch (error) {
+      response.status(422).json({
+        success: false,
+        messages: error.messages,
+      })
+    }
+  }
+
   private get validation () {
     return {
       schema: {
@@ -135,6 +156,11 @@ export default class QuestionsController {
         'status.required': 'Veuillez indiquer le status de votre question.',
         'quizId.required': 'Veuillez renseigner l\'id du quiz associé.',
         'quizId.exists': 'Ce quiz n\'existe pas.',
+        'responses.response0.required': 'Veuillez renseigner la bonne réponse.',
+        'responses.response1.required': 'Veuillez renseigner la mauvaise réponse n°1.',
+        'responses.response2.required': 'Veuillez renseigner la mauvaise réponse n°2.',
+        'responses.response3.required': 'Veuillez renseigner la réponse improbable.',
+        'profil.required': 'Veuillez renseigner le profil du joueur.',
       },
     }
   }

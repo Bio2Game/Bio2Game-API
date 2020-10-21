@@ -50,9 +50,6 @@ export default class QuizzesController {
         messages: this.validation.messages,
       })
 
-      //   payload.url = data.label.toLowerCase().normalize('NFKD')
-      // .replace(/[^\x00-\x7F]+/g, '').replace(/[^a-zA-Z0-9]+/g, '-')
-
       const quiz = await Quiz.create(payload)
 
       return {
@@ -102,7 +99,7 @@ export default class QuizzesController {
     }
   }
 
-  public async delete ({ response, params }: HttpContextContract){
+  public async delete ({ response, params, auth }: HttpContextContract){
     try {
       const quiz = await Quiz.find(params.id)
 
@@ -110,11 +107,14 @@ export default class QuizzesController {
         return response.status(404).json({ success: false })
       }
 
+      if(quiz.contributorId !== auth?.user?.id) {
+        return response.status(403).json({ success: false })
+      }
+
       await quiz.delete()
 
       return {
         success: true,
-        quiz,
       }
     } catch (error) {
       response.status(422).json({
