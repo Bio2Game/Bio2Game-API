@@ -6,6 +6,7 @@
  */
 
 import User from 'App/Models/User'
+import Guest from 'App/Models/Guest'
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 
 /*
@@ -18,20 +19,36 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'api',
+  guard: 'users',
   list: {
     /*
     |--------------------------------------------------------------------------
-    | Web Guard
+    | OAT Guard
     |--------------------------------------------------------------------------
     |
-    | Web guard uses classic old school sessions for authenticating users.
-    | If you are building a standard web application, it is recommended to
-    | use web guard with session driver
+    | OAT (Opaque access tokens) guard uses database backed tokens to authenticate
+    | HTTP request. This guard DOES NOT rely on sessions or cookies and uses
+    | Authorization header value for authentication.
+    |
+    | Use this guard to authenticate mobile apps or web clients that cannot rely
+    | on cookies/sessions.
     |
     */
-    web: {
-      driver: 'session',
+    users: {
+      driver: 'oat',
+
+      /*
+      |--------------------------------------------------------------------------
+      | Tokens provider
+      |--------------------------------------------------------------------------
+      |
+      | Uses SQL database for managing tokens.
+      |
+      */
+      tokenProvider: {
+        driver: 'database',
+        table: 'api_tokens',
+      },
 
       provider: {
         /*
@@ -91,7 +108,7 @@ const authConfig: AuthConfig = {
     | on cookies/sessions.
     |
     */
-    api: {
+    guests: {
       driver: 'oat',
 
       /*
@@ -139,7 +156,7 @@ const authConfig: AuthConfig = {
         | of the mentioned columns to find their user record.
         |
         */
-        uids: ['email'],
+        uids: ['token'],
 
         /*
         |--------------------------------------------------------------------------
@@ -149,7 +166,7 @@ const authConfig: AuthConfig = {
         | The model to use for fetching or finding users
         |
         */
-        model: User,
+        model: Guest,
       },
     },
   },
