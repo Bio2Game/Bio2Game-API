@@ -29,6 +29,10 @@ export default class Users extends BaseSchema {
       table.integer('dislike').defaultTo(0).unsigned()
       table.integer('status').defaultTo(0)
     })
+
+    this.schema.table('parties', (table) => {
+      table.dropColumn('quiz_id')
+    })
   }
 
   public async down () {
@@ -55,6 +59,10 @@ export default class Users extends BaseSchema {
       table.dropColumn('like')
       table.dropColumn('dislike')
       table.dropColumn('status')
+    })
+
+    this.schema.table('parties', (table) => {
+      table.integer('quiz_id')
     })
   }
 }

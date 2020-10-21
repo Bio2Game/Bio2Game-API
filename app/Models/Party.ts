@@ -21,9 +21,6 @@ export default class Party extends BaseModel {
   public questionsSize: number
 
   @column()
-  public quizId: number
-
-  @column()
   public contributorId: number
 
   @column()
