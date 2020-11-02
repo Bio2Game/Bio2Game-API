@@ -1,14 +1,12 @@
 import Party from 'App/Models/Party'
 
-import ApiToken from 'App/Models/ApiToken'
-
 import GameManager from './GameManager'
 import Player from './Player'
 import Phase from './Phase'
 import Timer from './Timer'
 import Animator from './Animator'
 
-import { Question } from './types'
+import { Question, UserAuthPayload, BannedPlayer, QuestionsResponses } from './types'
 
 import { Namespace, Socket } from 'socket.io'
 
@@ -18,25 +16,25 @@ export default class Game {
   public id: string
   public name: string
   public status: number = 0
-  public currentQuestion: any
+  public currentQuestion: Phase
   public questions: Question[]
-  public currentResponses: null
   public animatorId: number
   public animator: Animator
   public startDate: string
   public players: Player[] = []
+  public bannedPlayers: BannedPlayer[] = []
+  public stats: QuestionsResponses[] = []
   public finished: Timer
   public manager: GameManager
   public room: Namespace
   public pause: boolean
   public party: Party
+  public started: boolean
 
   constructor (manager: GameManager, name: string, questions: Question[], animatorId: number) {
     this.id = this.createCode()
     this.name = name
-    this.currentQuestion = null
     this.questions = questions
-    this.currentResponses = null
     this.animatorId = animatorId
     this.startDate = moment().format()
 
@@ -45,22 +43,11 @@ export default class Game {
     this.room = manager.io.to(this.id)
 
     this.pause = false
+    this.started = false
   }
 
-  public async onConnect (socket: Socket, token: string) {
-    const auth = await ApiToken.query().preload('user').where('token', token.substring(7)).first()
-
-    console.log(auth)
-
-    if(!auth) {
-      return socket.disconnect()
-    }
-
-    const user = auth.user || {
-      username: auth.username,
-    }
-
-    if (auth.user && user.id === this.animatorId) {
+  public onConnect (socket: Socket, { user }: UserAuthPayload) {
+    if (user && user.id === this.animatorId) {
       if (this.animator) {
         this.animator.socket.disconnect()
         this.animator.socket = socket
@@ -69,7 +56,15 @@ export default class Game {
       }
 
       this.animator = new Animator(socket, user, this)
-      return
+      return this.animator.connection()
+    }
+
+    if(this.bannedPlayers.some(player => player.id === user.id || player.ip === socket.conn.remoteAddress)) {
+      socket.emit('gameError', {
+        error: 403,
+        message: 'Vous avez été banni de cette partie.',
+      })
+      return socket.disconnect()
     }
 
     const playerExists = this.players.find(player => player.id === user.id)
@@ -79,10 +74,10 @@ export default class Game {
       playerExists.socket = socket
 
       return playerExists.connection()
-    }else if(this.status > 0){
+    } else if(this.status > 0) {
       socket.emit('gameError', {
         error: 403,
-        message: 'Cette partie a déjà été lancé',
+        message: 'Cette partie a déjà été lancé.',
       })
       return socket.disconnect()
     }
@@ -92,15 +87,18 @@ export default class Game {
     }
 
     const player = new Player(socket, user, this)
-
     this.players.push(player)
 
-    this.room.emit('join', player.serialize())
-
-    // this.players.concat([this.animator]).forEach(p => p.socket.emit('join', player.serialize()));
+    return player.connection()
   }
 
   public async start () {
+    if(this.started) {
+      return
+    }
+
+    this.started = true
+
     this.party = new Party()
 
     this.party.$attributes = {
@@ -130,6 +128,14 @@ export default class Game {
 
       this.room.emit('game', this.serialize())
 
+      this.stats.push({
+        question_id: question.id,
+        question_desc: question.question,
+        right_answers: 0,
+        wrong_answers: 0,
+        really_wrong_answers: 0,
+      })
+
       await this.currentQuestion.run()
 
       this.room.emit('game', this.serialize())
@@ -151,18 +157,26 @@ export default class Game {
   }
 
   public setPause () {
-    if(this.finished !== null) {
+    if(this.finished) {
       return
     }
+    this.pause = true
     this.currentQuestion.timer.pause()
     this.room.emit('pause')
   }
 
   public setResume () {
-    if(this.finished !== null) {
+    if(this.finished) {
       return
     }
+    this.pause = false
+
+    if (this.currentQuestion.allAnswersReceived() && this.status === 1) {
+      return this.currentQuestion.timer.stop()
+    }
+
     this.currentQuestion.timer.resume()
+
     this.room.emit('progress', {
       timeLeft: this.currentQuestion.timer.getTimeLeft(),
       timeTotal: this.currentQuestion.timer.time,
@@ -196,11 +210,11 @@ export default class Game {
       currentQuestion: this.currentQuestion ? this.currentQuestion.serialize() : null,
       finished: this.finished ? this.finished.serialize() : null,
       questions: this.questions,
-      currentResponses: this.currentResponses,
       animatorId: this.animatorId,
       animator: this.animator ? this.animator.serialize() : null,
       startDate: this.startDate,
       players: this.players.map(player => player.serialize()),
+      pause: this.pause,
     }
   }
 }
