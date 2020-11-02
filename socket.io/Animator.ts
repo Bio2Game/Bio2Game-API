@@ -1,6 +1,8 @@
 import { Socket } from 'socket.io'
 import Game from './Game'
 
+import { PartialUser } from './types'
+
 export default class Animator {
   public socket: Socket
 
@@ -8,32 +10,33 @@ export default class Animator {
 
   public id: number
   public username: string
+  public name?: string
   public email: string
-  public avatar_path: string
+  public avatar_path?: string
 
-  public website: string
+  public website?: string
 
   public isOnline: boolean
   public isAnimator: boolean = true
 
-  constructor (socket, user, game) {
+  constructor (socket: Socket, user: PartialUser, game: Game) {
     this.socket = socket
 
     this.game = game
 
     this.id = user.id
-    this.username = user.pseudo
+    this.username = user.username
+    this.name = user.name
     this.email = user.email
     this.avatar_path = user.avatar_path
 
     this.website = user.website
-
-    this.connection()
   }
 
   public connection () {
     this.socket.emit('game', this.game.serialize())
     this.socket.emit('you', this.serialize())
+    this.socket.emit('stats', this.game.stats)
 
     this.socket.on('startGame', () => {
       console.log('Lancement de la partie !')
@@ -45,9 +48,24 @@ export default class Animator {
       await this.game.stop()
     })
 
-    this.socket.on('kickUser', id => {
-      console.log('Exclusion d\'un utilisateur')
-      this.game.players.find(u => u.id === id)?.socket.disconnect()
+    this.socket.on('banPlayer', origin_player => {
+      const player = this.game.players.find(u => u.id === origin_player.id)
+      if(player) {
+        this.game.bannedPlayers.push({
+          id: player.id,
+          username: player.username,
+          email: player.email,
+          avatar_path: player.avatar_path,
+          ip: player.socket.conn.remoteAddress,
+        })
+        player.socket.emit('gameError', {
+          error: 403,
+          message: 'Vous avez été banni de cette partie.',
+        })
+        return player.socket.disconnect()
+      }
+
+      return this.game.bannedPlayers.push(origin_player)
     })
 
     this.socket.on('pause', () => {
