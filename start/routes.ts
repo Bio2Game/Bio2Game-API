@@ -26,11 +26,20 @@ Route.group(() => {
   })
 
   Route.group(() => {
-    Route.get('/user', 'AuthController.user')
+    Route.group(() => {
+      Route.get('/', 'AuthController.user')
 
-    Route.post('/register', 'AuthController.register')
-    Route.post('/login', 'AuthController.login')
-    Route.post('/logout', 'AuthController.logout')
+      Route.post('/register', 'AuthController.register')
+      Route.post('/login', 'AuthController.login')
+      Route.post('/logout', 'AuthController.logout')
+    }).prefix('/user')
+
+    Route.group(() => {
+      Route.get('/', 'GuestController.user')
+
+      Route.post('/register', 'GuestController.register')
+      Route.post('/logout', 'GuestController.logout')
+    }).prefix('/guest')
   }).prefix('/auth')
 
   Route.group(() => {
@@ -47,25 +56,28 @@ Route.group(() => {
   }).prefix('/questions')
 
   Route.group(() => {
-    Route.get('/', 'DomainsController.index')
-    Route.get('/:id', 'DomainsController.show')
-    Route.post('/', 'DomainsController.store')
-    Route.patch('/:id', 'DomainsController.update')
-    Route.delete('/:id', 'DomainsController.delete')
-  }).prefix('/domains')
+    Route.group(() => {
+      Route.get('/', 'Admin/UsersController.index')
+      Route.get('/:id', 'Admin/UsersController.show')
+      Route.patch('/:id', 'Admin/UsersController.update')
+      Route.delete('/:id', 'Admin/UsersController.delete')
+    }).prefix('/users')
 
-  Route.group(() => {
-    Route.get('/', 'IconsController.index')
-    Route.get('/:id', 'IconsController.show')
-    Route.post('/', 'IconsController.store')
-    Route.delete('/:id', 'IconsController.delete')
-  }).prefix('/icons')
+    Route.group(() => {
+      Route.get('/', 'DomainsController.index')
+      Route.get('/:id', 'DomainsController.show')
+      Route.post('/', 'DomainsController.store')
+      Route.patch('/:id', 'DomainsController.update')
+      Route.delete('/:id', 'DomainsController.delete')
+    }).prefix('/domains')
 
-  Route.group(() => {
-    Route.get('/', 'Admin/UsersController.index')
-    Route.get('/:id', 'Admin/UsersController.show')
-    Route.delete('/:id', 'Admin/UsersController.delete')
-  }).prefix('/users')
+    Route.group(() => {
+      Route.get('/', 'IconsController.index')
+      Route.get('/:id', 'IconsController.show')
+      Route.post('/', 'IconsController.store')
+      Route.delete('/:id', 'IconsController.delete')
+    }).prefix('/icons')
+  }).prefix('/admin').middleware(['auth', 'admin'])
 
   Route.group(() => {
     Route.patch('/', 'UsersController.update')
