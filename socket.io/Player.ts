@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io'
 import Game from './Game'
 
-import { PlayerResponsePayload, PartialUser } from './types'
+import { PlayerResponse, PartialUser, PlayerResponsePayload } from './types'
 
 export default class Player {
   public socket: Socket
@@ -11,9 +11,11 @@ export default class Player {
   public id: number
   public username: string
   public email: string
-  public simpleAuth: boolean
+  public avatar_path?: string
 
-  public responses: PlayerResponsePayload[]
+  public isGuest: boolean
+
+  public responses: PlayerResponse[]
 
   public isOnline: boolean
 
@@ -24,22 +26,24 @@ export default class Player {
 
     this.id = user.id
     this.username = user.username
+    this.avatar_path = user.avatar_path
     this.email = user.email
-    this.simpleAuth = user.uuid !== null
+    this.isGuest = !user.email
 
-    this.connection()
+    this.responses = []
   }
 
   public connection () {
     this.isOnline = true
 
+    this.game.room.emit('player_join', this.serialize())
+
     this.socket.once('disconnect', this.onDisconnect.bind(this))
 
     this.socket.emit('game', this.game.serialize())
-    this.socket.emit('you', this.serialize())
+    this.socket.emit('you', this.serialize(true))
 
-    this.socket.on('responseGiven', data => {
-      // Warning
+    this.socket.on('responseGiven', (data: PlayerResponsePayload) => {
       this.game.currentQuestion.onReponse(this, data)
     })
   }
@@ -47,35 +51,30 @@ export default class Player {
   public onDisconnect () {
     this.isOnline = false
 
-    this.game.room.emit('leave', this.serialize())
+    this.game.room.emit('player_leave', this.serialize())
 
     if (this.game.status === 0) {
       this.game.players.splice(this.game.players.indexOf(this), 1)
     }
   }
 
-  public serialize (){
+  public serialize (responses = false){
     return {
       id: this.id,
       username: this.username,
       email: this.email,
-      simpleAuth: this.simpleAuth,
+      avatar_path: this.avatar_path,
+      isGuest: this.isGuest,
       isOnline: this.isOnline,
-      responses: this.responses,
+      responses: responses ? this.responses : undefined,
     }
   }
 
-//   public asResponse () {
-//     return {
-//       id: this.id,
-//       username: this.username,
-//       responses: this.responses.map(response => {
-//         return {
-//           questionId: response.id,
-//           response: response.response,
-//           time: response.time,
-//         }
-//       }),
-//     }
-//   }
+  public asResponse () {
+    return {
+      id: this.id,
+      username: this.username,
+      responses: this.responses,
+    }
+  }
 }
