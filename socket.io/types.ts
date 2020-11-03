@@ -19,13 +19,30 @@ export interface Question {
 export interface PartialUser {
   id: number
   username: string
+  name?: string
   email: string
+  avatar_path?: string
+  website?: string
+}
+
+export interface BannedPlayer {
+  id: number
+  username: string
+  name?: string
+  email: string
+  avatar_path?: string
+  ip?: string
+}
+
+export interface PlayerResponse {
+  id: number
+  response: number
+  time: number
 }
 
 export interface PlayerResponsePayload {
   id: number
-  response: string
-  time: number
+  response: number
 }
 
 export interface CreateGamePayload {
@@ -36,11 +53,18 @@ export interface CreateGamePayload {
 
 export interface JoinGamePayload {
   gameId: string
-  token: string
+  auth: UserAuthPayload
 }
 
 export interface UserAuthPayload {
-  auth: boolean
   token: string
-  user: number | null
+  user: PartialUser
+}
+
+export interface QuestionsResponses {
+  question_id: number
+  question_desc: string
+  right_answers: number
+  wrong_answers: number
+  really_wrong_answers: number
 }
