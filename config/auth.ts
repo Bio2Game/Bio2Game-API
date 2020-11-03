@@ -5,8 +5,6 @@
  * file.
  */
 
-import User from 'App/Models/User'
-import Guest from 'App/Models/Guest'
 import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 
 /*
@@ -19,8 +17,66 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'users',
+  guard: 'api',
   list: {
+    /*
+    |--------------------------------------------------------------------------
+    | Web Guard
+    |--------------------------------------------------------------------------
+    |
+    | Web guard uses classic old school sessions for authenticating users.
+    | If you are building a standard web application, it is recommended to
+    | use web guard with session driver
+    |
+    */
+    web: {
+      driver: 'session',
+
+      provider: {
+        /*
+        |--------------------------------------------------------------------------
+        | Driver
+        |--------------------------------------------------------------------------
+        |
+        | Name of the driver
+        |
+        */
+        driver: 'lucid',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Identifier key
+        |--------------------------------------------------------------------------
+        |
+        | The identifier key is the unique key on the model. In most cases specifying
+        | the primary key is the right choice.
+        |
+        */
+        identifierKey: 'id',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Uids
+        |--------------------------------------------------------------------------
+        |
+        | Uids are used to search a user against one of the mentioned columns. During
+        | login, the auth module will search the user mentioned value against one
+        | of the mentioned columns to find their user record.
+        |
+        */
+        uids: ['email'],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Model
+        |--------------------------------------------------------------------------
+        |
+        | The model to use for fetching or finding users
+        |
+        */
+        model: () => import('App/Models/User'),
+      },
+    },
     /*
     |--------------------------------------------------------------------------
     | OAT Guard
@@ -34,7 +90,7 @@ const authConfig: AuthConfig = {
     | on cookies/sessions.
     |
     */
-    users: {
+    api: {
       driver: 'oat',
 
       /*
@@ -92,81 +148,7 @@ const authConfig: AuthConfig = {
         | The model to use for fetching or finding users
         |
         */
-        model: User,
-      },
-    },
-    /*
-    |--------------------------------------------------------------------------
-    | OAT Guard
-    |--------------------------------------------------------------------------
-    |
-    | OAT (Opaque access tokens) guard uses database backed tokens to authenticate
-    | HTTP request. This guard DOES NOT rely on sessions or cookies and uses
-    | Authorization header value for authentication.
-    |
-    | Use this guard to authenticate mobile apps or web clients that cannot rely
-    | on cookies/sessions.
-    |
-    */
-    guests: {
-      driver: 'oat',
-
-      /*
-      |--------------------------------------------------------------------------
-      | Tokens provider
-      |--------------------------------------------------------------------------
-      |
-      | Uses SQL database for managing tokens.
-      |
-      */
-      tokenProvider: {
-        driver: 'database',
-        table: 'api_tokens',
-      },
-
-      provider: {
-        /*
-        |--------------------------------------------------------------------------
-        | Driver
-        |--------------------------------------------------------------------------
-        |
-        | Name of the driver
-        |
-        */
-        driver: 'lucid',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Identifier key
-        |--------------------------------------------------------------------------
-        |
-        | The identifier key is the unique key on the model. In most cases specifying
-        | the primary key is the right choice.
-        |
-        */
-        identifierKey: 'id',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Uids
-        |--------------------------------------------------------------------------
-        |
-        | Uids are used to search a user against one of the mentioned columns. During
-        | login, the auth module will search the user mentioned value against one
-        | of the mentioned columns to find their user record.
-        |
-        */
-        uids: ['token'],
-
-        /*
-        |--------------------------------------------------------------------------
-        | Model
-        |--------------------------------------------------------------------------
-        |
-        | The model to use for fetching or finding users
-        |
-        */
-        model: Guest,
+        model: () => import('App/Models/User')
       },
     },
   },
