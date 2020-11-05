@@ -5,7 +5,6 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
 import { HashConfig } from '@ioc:Adonis/Core/Hash'
 
 /*
@@ -27,7 +26,7 @@ const hashConfig: HashConfig = {
   | free to change the default value
   |
   */
-  default: Env.get('HASH_DRIVER', 'argon'),
+  default: 'custom',
 
   list: {
     /*
@@ -68,6 +67,20 @@ const hashConfig: HashConfig = {
     bcrypt: {
       driver: 'bcrypt',
       rounds: 10,
+    },
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bcrypt
+    |--------------------------------------------------------------------------
+    |
+    | Config related to bcrypt hashing. https://www.npmjs.com/package/bcrypt
+    | package is used internally.
+    |
+    */
+    custom: {
+      driver: 'custom-bcrypt',
+      saltRounds: 10,
     },
   },
 }

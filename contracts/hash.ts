@@ -5,6 +5,10 @@
  * file.
  */
 
+/**
+ * Replace `contracts/hash.ts` with this
+*/
+
 declare module '@ioc:Adonis/Core/Hash' {
   import { HashDrivers } from '@ioc:Adonis/Core/Hash'
 
@@ -13,6 +17,10 @@ declare module '@ioc:Adonis/Core/Hash' {
       config: BcryptConfig,
       implementation: BcryptContract,
     },
+    custom: {
+      config: { saltRounds: number, driver: 'custom-bcrypt' },
+      implementation: HashDriverContract,
+    }
     argon: {
       config: ArgonConfig,
       implementation: ArgonContract,

@@ -26,6 +26,7 @@
     "@adonisjs/repl": "^1.1.5",
     "@adonisjs/session": "^3.1.2",
     "@types/socket.io": "^2.1.11",
+    "bcrypt": "^5.0.0",
     "lodash": "^4.17.15",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
