@@ -20,10 +20,18 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.get('/', async () => {
+  return 'Bienvenue sur l\'api privé de Bio2Game, vous n\'avez rien a faire ici :c'
+})
+
 Route.group(() => {
   Route.get('/', async () => {
     return 'Bienvenue sur l\'api privé de Bio2Game, vous n\'avez rien a faire ici :c'
   })
+
+  Route.group(() => {
+    Route.get('/', 'UsersController.index')
+  }).prefix('/contributors')
 
   Route.group(() => {
     Route.group(() => {
