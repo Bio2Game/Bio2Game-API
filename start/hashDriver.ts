@@ -50,7 +50,7 @@ class CustomBcryptDriver implements HashDriverContract {
    * Verify value
    */
   public async verify (hashedValue: string, plainValue: string) {
-    return bcrypt.verify(plainValue, hashedValue)
+    return bcrypt.compare(plainValue, hashedValue)
   }
 }
 
