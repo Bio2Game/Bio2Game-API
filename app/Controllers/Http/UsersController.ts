@@ -5,8 +5,12 @@ import User from 'App/Models/User'
 
 export default class UsersController {
   public async index () {
-    const users = await User.query().orderBy('updated_at', 'desc')
-    return { success: true, users }
+    const contributors = await User.query()
+      .preload('quizzes', (query) => query.preload('domain', (query) => query.preload('icon')))
+      .where('status', 1).whereHas('quizzes', (query) => {
+        query.where('status', 1)
+      }, '>', 1).orderBy('updated_at', 'desc')
+    return { contributors }
   }
 
   public async update ({ request, response, auth }: HttpContextContract) {
