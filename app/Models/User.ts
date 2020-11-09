@@ -23,6 +23,9 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
+  public description: string
+
+  @column()
   public languageCode: string
 
   @column()

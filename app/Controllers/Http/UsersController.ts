@@ -6,10 +6,8 @@ import User from 'App/Models/User'
 export default class UsersController {
   public async index () {
     const contributors = await User.query()
-      .preload('quizzes', (query) => query.preload('domain', (query) => query.preload('icon')))
-      .where('status', 1).whereHas('quizzes', (query) => {
-        query.where('status', 1)
-      }, '>', 1).orderBy('updated_at', 'desc')
+      .preload('quizzes', (query) => query.limit(5).preload('domain', (query) => query.preload('icon')))
+      .where('status', 1).whereHas('quizzes', (query) => query.where('status', 1), '>', 1).orderBy('updated_at', 'desc')
     return { contributors }
   }
 
@@ -27,6 +25,7 @@ export default class UsersController {
         rules.exists({ table: 'users', column: 'password' }),
       ]),
       password: schema.string.optional({ trim: true }),
+      description: schema.string.optional(),
       sex: schema.number.optional(),
       birth_date: schema.date.optional(),
       localisation: schema.string.optional({ trim: true }),
