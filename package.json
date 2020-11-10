@@ -6,7 +6,9 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "dev": "node ace serve --watch",
-    "lint": "eslint . --ext=.ts"
+    "lint": "eslint . --ext=.ts",
+    "db:migrate": "docker exec -it bio2game_backend node ./build/ace migration:run",
+    "db:migrate:undo": "docker exec -it bio2game_backend node ./build/ace migration:undo"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.6",
