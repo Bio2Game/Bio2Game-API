@@ -25,7 +25,7 @@ export default class QuestionsController {
   }
 
   public async store ({ request, response, auth }: HttpContextContract){
-    const { quizId } = request.only(['quizId'])
+    const data = request.only(['quiz_id'])
 
     try {
       const payload = await request.validate({
@@ -34,11 +34,11 @@ export default class QuestionsController {
             rules.unique({
               table: 'questions',
               column: 'label',
-              where: { 'quiz_id': quizId },
+              where: { 'quiz_id': data.quiz_id },
             }),
             rules.maxLength(255),
           ]),
-          quizId: schema.number([
+          quiz_id: schema.number([
             rules.exists({ table: 'quizzes', column: 'id', where: { 'contributor_id': auth?.user?.id } }),
           ]),
           ...this.validation.schema,
@@ -61,7 +61,7 @@ export default class QuestionsController {
   }
 
   public async update ({ request, response, params, auth }: HttpContextContract){
-    const { quizId } = request.only(['quizId'])
+    const data = request.only(['quiz_id'])
 
     try {
       const question = await Question.find(params.id)
@@ -76,12 +76,12 @@ export default class QuestionsController {
             rules.unique({
               table: 'questions',
               column: 'label',
-              where: { 'quiz_id': quizId },
+              where: { 'quiz_id': data.quiz_id },
               whereNot: { 'id': params.id },
             }),
             rules.maxLength(255),
           ]),
-          quizId: schema.number([
+          quiz_id: schema.number([
             rules.exists({ table: 'quizzes', column: 'id', where: { 'contributor_id': auth?.user?.id } }),
           ]),
           ...this.validation.schema,
