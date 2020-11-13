@@ -10,7 +10,8 @@ enum Languages {
 export default class QuizzesController {
   public async index () {
     const quizzes = await Quiz.query()
-      .preload('author').preload('domain', (query) => query.preload('icon')).preload('questions')
+      .preload('author').preload('domain', (query) => query.preload('icon'))
+      .preload('questions', query => query.where('status', 1))
       .where('status', 1).orderBy('updated_at', 'desc')
     return { quizzes }
   }
