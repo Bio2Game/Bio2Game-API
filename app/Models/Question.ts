@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 
 import Quiz from 'App/Models/Quiz'
+import Response from 'App/Models/Response'
 
 export default class Question extends BaseModel {
   @column({ isPrimary: true })
@@ -42,4 +43,7 @@ export default class Question extends BaseModel {
 
   @belongsTo(() => Quiz, { localKey: 'id', foreignKey: 'quizId' })
   public quiz: BelongsTo<typeof Quiz>
+
+  @belongsTo(() => Response, { localKey: 'questionId', foreignKey: 'id' })
+  public user_response: BelongsTo<typeof Response>
 }
