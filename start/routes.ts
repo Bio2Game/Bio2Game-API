@@ -92,6 +92,11 @@ Route.group(() => {
   }).prefix('/user').middleware('auth')
 
   Route.group(() => {
+    Route.get('/:id', 'UserQuizsController.show')
+    Route.post('/:id', 'UserQuizsController.store')
+  }).prefix('/quiz')
+
+  Route.group(() => {
     Route.group(() => {
       Route.get('/', 'Contributor/QuizzesController.index')
       Route.post('/', 'Contributor/QuizzesController.store')
