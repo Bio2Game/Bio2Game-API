@@ -14,7 +14,7 @@ export default class Phase {
 
   public position: Number
 
-  constructor(question: Question, game: Game) {
+  constructor (question: Question, game: Game) {
     this.question = question
     this.game = game
     this.position = this.game.questions.indexOf(question)
@@ -22,12 +22,12 @@ export default class Phase {
     this.refs = ['right_answers', 'wrong_answers', 'wrong_answers', 'really_wrong_answers']
   }
 
-  public async run() {
+  public async run () {
     await this.start()
     return this.response()
   }
 
-  public async start() {
+  public async start () {
     this.timer = new Timer(this.question.time * 1000)
 
     this.game.room.emit('progress', {
@@ -38,7 +38,7 @@ export default class Phase {
     await this.timer.start()
   }
 
-  public async response() {
+  public async response () {
     this.timer = new Timer(10 * 1000)
 
     this.game.party.responses = JSON.stringify(this.game.players.map((player: Player) => player.asResponse()))
@@ -62,7 +62,7 @@ export default class Phase {
     await this.timer.start()
   }
 
-  public onReponse(player: Player, data: PlayerResponsePayload) {
+  public onReponse (player: Player, data: PlayerResponsePayload) {
     player.responses.push({
       id: data.id,
       response: data.response,
@@ -82,20 +82,20 @@ export default class Phase {
     }
   }
 
-  private saveAnswer(data: PlayerResponsePayload) {
+  private saveAnswer (data: PlayerResponsePayload) {
     const question = this.game.stats.find(({ question_id }) => question_id === data.id)
     question![this.refs[data.response.toString()]]++
 
     this.game.animator.socket.emit('stats', this.game.stats)
   }
 
-  public allAnswersReceived() {
+  public allAnswersReceived () {
     return this.game.onlinePlayers().length === this.game.players.filter((u: Player) =>
       u.responses.some((response: PlayerResponse) => response.id === this.question.id)
     ).length
   }
 
-  public serialize() {
+  public serialize () {
     return {
       question: this.question,
       timer: this.timer?.serialize(),

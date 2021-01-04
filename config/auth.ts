@@ -148,7 +148,7 @@ const authConfig: AuthConfig = {
         | The model to use for fetching or finding users
         |
         */
-        model: () => import('App/Models/User')
+        model: () => import('App/Models/User'),
       },
     },
   },
