@@ -11,7 +11,16 @@ export default class QuizzesController {
   public async index () {
     const quizzes = await Quiz.query()
       .preload('author').preload('domain', (query) => query.preload('icon'))
-      .preload('questions', query => query.where('status', 1))
+      .whereHas('questions', query => query.where('status', 1))
+      .where('status', 1).orderBy('updated_at', 'desc')
+    return { quizzes }
+  }
+
+  public async indexQuestions () {
+    const quizzes = await Quiz.query()
+      .preload('author').preload('domain', (query) => query.preload('icon'))
+      .whereHas('questions', query => query.where('status', 1))
+      .preload('questions')
       .where('status', 1).orderBy('updated_at', 'desc')
     return { quizzes }
   }

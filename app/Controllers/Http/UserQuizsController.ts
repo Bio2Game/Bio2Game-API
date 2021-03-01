@@ -33,7 +33,7 @@ export default class UserQuizsController {
   public async store ({ request, params, auth }: HttpContextContract){
     const data = request.only(['question_id', 'response_id', 'response', 'time'])
 
-    await Response.create({
+    const response = await Response.create({
       quizId: params.id,
       questionId: data.question_id,
       reponsNb: data.response_id,
@@ -42,7 +42,7 @@ export default class UserQuizsController {
       userId: auth.user!.id,
     })
 
-    return { success: true }
+    return { success: true, response }
   }
 
   //   async autoresponse ({auth,params, session}){
