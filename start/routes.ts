@@ -51,7 +51,13 @@ Route.group(() => {
   }).prefix('/auth')
 
   Route.group(() => {
+    Route.get('/', 'FormationsController.index')
+    Route.get('/:id', 'FormationsController.show')
+  }).prefix('/formations')
+
+  Route.group(() => {
     Route.get('/', 'QuizzesController.index')
+    Route.get('/questions', 'QuizzesController.indexQuestions')
     Route.get('/:id', 'QuizzesController.show')
   }).prefix('/quizzes')
 
@@ -85,6 +91,14 @@ Route.group(() => {
       Route.post('/', 'IconsController.store')
       Route.delete('/:id', 'IconsController.delete')
     }).prefix('/icons')
+
+    Route.group(() => {
+      Route.get('/', 'FormationsController.list')
+      Route.get('/:id', 'FormationsController.show')
+      Route.post('/', 'FormationsController.store')
+      Route.patch('/:id', 'FormationsController.update')
+      Route.delete('/:id', 'FormationsController.delete')
+    }).prefix('/formations')
   }).prefix('/admin').middleware(['auth', 'admin'])
 
   Route.group(() => {
