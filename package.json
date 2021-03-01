@@ -1,5 +1,5 @@
 {
-  "name": "bio2game-api",
+  "name": "bio2game_backend",
   "version": "0.0.0",
   "private": true,
   "scripts": {
