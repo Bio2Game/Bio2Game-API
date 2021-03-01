@@ -18,16 +18,14 @@ export default class ImageController {
       return image.errors
     }
 
-    const name = new Date().getTime() + (image?.extname || '.png')
+    const name = new Date().getTime() + (image.extname || '.png')
 
-    if (image) {
-      sharp(image.tmpPath)
-        .resize({ width: 1024, withoutEnlargement: true })
-        .resize({ height: 1024, withoutEnlargement: true })
-        .rotate() // necessary to rotate back to what it should be (from exif)
-        .toFile(`${Application.publicPath('/images/illustrations')}/${name}`)
-        .catch(console.error)
-    }
+    sharp(image.tmpPath)
+      .resize({ width: 1024, withoutEnlargement: true })
+      .resize({ height: 1024, withoutEnlargement: true })
+      .rotate() // necessary to rotate back to what it should be (from exif)
+      .toFile(`${Application.publicPath('/images/illustrations')}/${name}`)
+      .catch(console.error)
 
     return `/images/${name}`
   }
