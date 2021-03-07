@@ -13,6 +13,7 @@ export default class QuizzesController {
       return { quizzes: [] }
     }
     const quizzes = await Quiz.query().where('contributor_id', auth.user.id)
+      .preload('author')
       .preload('domain', (query) => query.preload('icon')).preload('questions')
     return { quizzes }
   }
