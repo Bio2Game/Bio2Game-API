@@ -145,6 +145,7 @@ export default class QuestionsController {
         ]),
         status: schema.number(),
         time: schema.number.optional(),
+        order: schema.number.optional(),
       },
       messages: {
         'label.required': 'Veuillez indiquer le titre de la question.',

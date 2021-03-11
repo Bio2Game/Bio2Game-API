@@ -24,6 +24,10 @@ export default class UserQuizsController {
       })
     }
 
+    quiz.questions = quiz.questions.sort(
+      (a, b) => a[a.order !== null ? 'order' : 'id'] - b[b.order !== null ? 'order' : 'id']
+    )
+
     return {
       success: true,
       quiz,

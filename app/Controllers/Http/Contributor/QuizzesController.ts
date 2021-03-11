@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Quiz from 'App/Models/Quiz'
+import Question from 'App/Models/Question'
 
 enum Languages {
   FR = 'fr',
@@ -15,7 +16,15 @@ export default class QuizzesController {
     const quizzes = await Quiz.query().where('contributor_id', auth.user.id)
       .preload('author')
       .preload('domain', (query) => query.preload('icon')).preload('questions')
-    return { quizzes }
+    return {
+      quizzes: quizzes.map(quiz => ({
+        ...quiz.serialize(),
+        questions: quiz.questions.map((question, index) => ({
+          ...question.serialize(),
+          order: question.order ?? index,
+        })),
+      })),
+    }
   }
 
   public async show ({ response, params }: HttpContextContract){
@@ -91,6 +100,46 @@ export default class QuizzesController {
       return {
         success: true,
         quiz,
+      }
+    } catch (error) {
+      response.status(422).json({
+        success: false,
+        messages: error.messages,
+      })
+    }
+  }
+
+  public async updateOrder ({ auth, request, response, params }: HttpContextContract){
+    try {
+      const quiz = await Quiz.find(params.id)
+
+      if(!quiz) {
+        return response.status(404).json({ success: false })
+      }
+
+      if(quiz.contributorId !== auth.user?.id) {
+        response.status(403).json({ success: false })
+      }
+
+      const questions = await Promise.all(
+        request.input('questions').map(question => {
+          return Question.query()
+            .where({ id: question.id, quiz_id: params.id })
+            .first()
+            .then(existingQuestion => {
+              if (!existingQuestion) {
+                return
+              }
+              existingQuestion.order = question.order
+              return existingQuestion.save()
+            })
+        })
+      )
+
+      return {
+        success: true,
+        questions,
+        quiz_id: quiz.id,
       }
     } catch (error) {
       response.status(422).json({

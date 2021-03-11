@@ -43,7 +43,7 @@ Route.group(() => {
     }).prefix('/user')
 
     Route.group(() => {
-      Route.get('/', 'GuestController.user')
+      Route.get('/', 'GuestController.guest')
 
       Route.post('/register', 'GuestController.register')
       Route.post('/logout', 'GuestController.logout')
@@ -115,6 +115,7 @@ Route.group(() => {
       Route.get('/', 'Contributor/QuizzesController.index')
       Route.post('/', 'Contributor/QuizzesController.store')
       Route.patch('/:id', 'Contributor/QuizzesController.update')
+      Route.patch('/:id/order', 'Contributor/QuizzesController.updateOrder')
       Route.delete('/:id', 'Contributor/QuizzesController.delete')
     }).prefix('/quizzes')
 

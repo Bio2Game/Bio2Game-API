@@ -30,8 +30,12 @@ export default class QuizzesController {
       const quiz = await Quiz.find(params.id)
 
       if(!quiz) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
+
+      quiz.questions = quiz.questions.sort(
+        (a, b) => a[a.order !== null ? 'order' : 'id'] - b[b.order !== null ? 'order' : 'id']
+      )
 
       return {
         success: true,
