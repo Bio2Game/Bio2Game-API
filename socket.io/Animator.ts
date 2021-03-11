@@ -70,12 +70,10 @@ export default class Animator {
 
     this.socket.on('pause', () => {
       this.game.setPause()
-      console.log('i want a pause', this.game.currentQuestion.timer.getTimeLeft())
     })
 
     this.socket.on('resume', () => {
       this.game.setResume()
-      console.log('i want to work', this.game.currentQuestion.timer.getTimeLeft())
     })
   }
 
