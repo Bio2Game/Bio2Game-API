@@ -4,7 +4,19 @@ import Quiz from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
 
 export default class UserQuizsController {
-  public async show ({ params, auth, response }: HttpContextContract) {
+  public async show ({ params, auth, response, request }: HttpContextContract) {
+    let authMethod: 'user' | 'guest'
+    if(await auth.use('user').check()) {
+      authMethod = 'user'
+    } else if (await auth.use('guest').check()) {
+      authMethod = 'guest'
+    } else {
+      return response.status(403).json({
+        success: false,
+        messages: 'Not allowed',
+      })
+    }
+
     const quiz = await Quiz.query()
       .where({
         status: 1,
@@ -13,7 +25,7 @@ export default class UserQuizsController {
       .preload('questions', (query) =>
         query.where('status', 1)
           .preload('user_response', query =>
-            query.where('userId', auth.user!.id)
+            query.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
           ).orderBy('id')
       ).first()
 
@@ -35,7 +47,9 @@ export default class UserQuizsController {
   }
 
   public async store ({ request, params, auth }: HttpContextContract){
-    const data = request.only(['question_id', 'response_id', 'response', 'time'])
+    const data = request.only(['question_id', 'response_id', 'response', 'time', 'strategy'])
+
+    await auth.use(data.strategy).check()
 
     const response = await Response.create({
       quizId: params.id,
@@ -43,7 +57,8 @@ export default class UserQuizsController {
       reponsNb: data.response_id,
       response: data.response,
       responsTimeSpent: data.time,
-      userId: auth.user!.id,
+      userId: auth.use('user').user?.id,
+      guestId: auth.use('guest').user?.id,
     })
 
     return { success: true, response }

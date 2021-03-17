@@ -17,20 +17,36 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 |
 */
 const authConfig: AuthConfig = {
-  guard: 'api',
+  guard: 'user',
   list: {
     /*
     |--------------------------------------------------------------------------
-    | Web Guard
+    | OAT Guard
     |--------------------------------------------------------------------------
     |
-    | Web guard uses classic old school sessions for authenticating users.
-    | If you are building a standard web application, it is recommended to
-    | use web guard with session driver
+    | OAT (Opaque access tokens) guard uses database backed tokens to authenticate
+    | HTTP request. This guard DOES NOT rely on sessions or cookies and uses
+    | Authorization header value for authentication.
+    |
+    | Use this guard to authenticate mobile apps or web clients that cannot rely
+    | on cookies/sessions.
     |
     */
-    web: {
-      driver: 'session',
+    user: {
+      driver: 'oat',
+
+      /*
+      |--------------------------------------------------------------------------
+      | Tokens provider
+      |--------------------------------------------------------------------------
+      |
+      | Uses SQL database for managing tokens.
+      |
+      */
+      tokenProvider: {
+        driver: 'database',
+        table: 'user_tokens',
+      },
 
       provider: {
         /*
@@ -90,7 +106,7 @@ const authConfig: AuthConfig = {
     | on cookies/sessions.
     |
     */
-    api: {
+    guest: {
       driver: 'oat',
 
       /*
@@ -103,7 +119,7 @@ const authConfig: AuthConfig = {
       */
       tokenProvider: {
         driver: 'database',
-        table: 'api_tokens',
+        table: 'guest_tokens',
       },
 
       provider: {
@@ -138,7 +154,7 @@ const authConfig: AuthConfig = {
         | of the mentioned columns to find their user record.
         |
         */
-        uids: ['email'],
+        uids: ['id'],
 
         /*
         |--------------------------------------------------------------------------
@@ -148,7 +164,7 @@ const authConfig: AuthConfig = {
         | The model to use for fetching or finding users
         |
         */
-        model: () => import('App/Models/User'),
+        model: () => import('App/Models/Guest'),
       },
     },
   },

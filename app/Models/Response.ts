@@ -13,7 +13,7 @@ export default class Response extends BaseModel {
   public userId: number
 
   @column()
-  public simpleUserId: string
+  public guestId: string
 
   @column()
   public responsTimeSpent: number

@@ -6,6 +6,7 @@
  */
 
 import User from 'App/Models/User'
+import Guest from 'App/Models/Guest'
 
 declare module '@ioc:Adonis/Addons/Auth' {
   /*
@@ -37,6 +38,23 @@ declare module '@ioc:Adonis/Addons/Auth' {
       implementation: LucidProviderContract<typeof User>,
       config: LucidProviderConfig<typeof User>,
     },
+
+    /*
+    |--------------------------------------------------------------------------
+    | Guest Provider
+    |--------------------------------------------------------------------------
+    |
+    | The following provider uses Lucid models as a driver for fetching user
+    | details from the database for authentication.
+    |
+    | You can create multiple providers using the same underlying driver with
+    | different Lucid models.
+    |
+    */
+    guest: {
+      implementation: LucidProviderContract<typeof Guest>,
+      config: LucidProviderConfig<typeof Guest>,
+    },
   }
 
   /*
@@ -58,16 +76,16 @@ declare module '@ioc:Adonis/Addons/Auth' {
   interface GuardsList {
     /*
     |--------------------------------------------------------------------------
-    | Web Guard
+    | OAT Guard
     |--------------------------------------------------------------------------
     |
-    | The web guard uses sessions for maintaining user login state. It uses
-    | the `user` provider for fetching user details.
+    | OAT, stands for (Opaque access tokens) guard uses database backed tokens
+    | to authenticate requests.
     |
     */
-    web: {
-      implementation: SessionGuardContract<'user', 'web'>,
-      config: SessionGuardConfig<'user'>,
+    user: {
+      implementation: OATGuardContract<'user', 'user'>,
+      config: OATGuardConfig<'user'>,
     },
     /*
     |--------------------------------------------------------------------------
@@ -78,9 +96,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | to authenticate requests.
     |
     */
-    api: {
-      implementation: OATGuardContract<'user', 'api'>,
-      config: OATGuardConfig<'user'>,
+    guest: {
+      implementation: OATGuardContract<'guest', 'guest'>,
+      config: OATGuardConfig<'guest'>,
     },
   }
 }
