@@ -4,7 +4,7 @@ import Quiz from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
 
 export default class UserQuizsController {
-  public async show ({ params, auth, response, request }: HttpContextContract) {
+  public async show ({ params, auth, response }: HttpContextContract) {
     let authMethod: 'user' | 'guest'
     if(await auth.use('user').check()) {
       authMethod = 'user'
