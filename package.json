@@ -20,7 +20,7 @@
     }
   },
   "devDependencies": {
-    "@adonisjs/assembler": "^4.0.1",
+    "@adonisjs/assembler": "^3.0.6",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@types/sharp": "^0.26.0",
