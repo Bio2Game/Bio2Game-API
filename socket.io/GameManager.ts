@@ -18,21 +18,18 @@ export default class GameManager {
     socket.on('joinGame', async ({ gameId, auth }: JoinGamePayload) => {
       const game = this.games.find(game => game.id === gameId)
 
-      if(!auth || !auth.user) {
-        socket.emit('authError', {
-          error: 403,
-          message: 'Vous n\'êtes pas connecté !',
-        })
-        console.log('Bad auth !')
-        return socket.disconnect()
-      }
-
       if(!game) {
         socket.emit('gameError', {
           error: 404,
           message: 'Il semblerait que cette partie n\'existe pas ou soit terminé !',
         })
         console.log('Déconnexion game !')
+        return socket.disconnect()
+      }
+
+      if(!auth || !auth.user) {
+        socket.emit('authError')
+        console.log('Bad auth !')
         return socket.disconnect()
       }
 

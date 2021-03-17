@@ -4,7 +4,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class AuthController {
   public async user ({ auth }: HttpContextContract) {
-    const user = await auth.authenticate()
+    const user = await auth.use('user').authenticate()
     return user ? user.toJSON() : false
   }
 
@@ -65,7 +65,7 @@ export default class AuthController {
         },
       })
 
-      const token = await auth.attempt(email, password)
+      const token = await auth.use('user').attempt(email, password)
 
       return token.toJSON()
     } catch (error) {
@@ -102,7 +102,7 @@ export default class AuthController {
   }
 
   public async logout ({ auth, response }: HttpContextContract) {
-    await auth.logout()
+    await auth.use('user').logout()
 
     response.status(200).json({
       success: true,
