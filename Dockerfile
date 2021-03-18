@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build --production
 
-FROM node:14-alpine
+FROM node:14
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/build ./build
