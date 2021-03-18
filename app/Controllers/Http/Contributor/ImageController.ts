@@ -27,6 +27,6 @@ export default class ImageController {
       .toFile(`${Application.makePath('files')}/${name}`)
       .catch(console.error)
 
-    return `https://cdn.bio2game.com/images/${name}`
+    return `https://cdn.bio2game.com/${name}`
   }
 }
