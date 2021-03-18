@@ -48,7 +48,7 @@ export default class DomainsController {
 
       if(payload.image){
         image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${payload.image.subtype}`
-        await payload.image.move(Application.publicPath('/images/illustrations'), {name: image})
+        await payload.image.move(Application.makePath('files/illustrations'), {name: image})
       }
 
       const domain = await Domain.create({
@@ -91,7 +91,7 @@ export default class DomainsController {
 
       if(payload.image){
         image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${payload.image.subtype}`
-        await payload.image.move(Application.publicPath('/images/illustrations'), {name: image})
+        await payload.image.move(Application.makePath('files/illustrations'), {name: image})
       }
 
       domain?.merge({
