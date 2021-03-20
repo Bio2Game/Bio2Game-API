@@ -9,7 +9,6 @@ export default class Formations extends BaseSchema {
       table.text('content').notNullable()
       table.string('url').notNullable()
       table.integer('level').notNullable().defaultTo(0)
-      table.string('keyswords').notNullable()
       table.integer('status').notNullable().defaultTo(0)
       table.integer('duration').notNullable()
       table.integer('leaves').notNullable()

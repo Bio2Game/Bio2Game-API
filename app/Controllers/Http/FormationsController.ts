@@ -136,9 +136,6 @@ export default class FormationsController {
           rules.maxLength(255),
         ]),
         level: schema.number(),
-        keyswords: schema.string({}, [
-          rules.maxLength(255),
-        ]),
         status: schema.number(),
         duration: schema.number(),
         leaves: schema.number(),
@@ -161,8 +158,6 @@ export default class FormationsController {
         'url.regex': 'Veuillez respecter le format de l\'url.',
         'url.maxLength': 'L\'url de votre formation ne peut pas dépasser {{ maxLength }} caractères.',
         'level.required': 'Veuillez renseigner le profil ciblé.',
-        'keyswords.required': 'Veuillez renseigner les mots clés de la formation.',
-        'keyswords.maxLength': 'Vos mots clés ne peuvent pas dépasser {{ maxLength }} caractères au total.',
         'status.required': 'Veuillez indiquer le status de votre formation.',
         'duration.required': 'Veuillez indiquer la durée de votre formation.',
         'leaves.required': 'Veuillez indiquer le nombre de feuilles de votre formation.',

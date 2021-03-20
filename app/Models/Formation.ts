@@ -28,9 +28,6 @@ export default class Formation extends BaseModel {
   public level: number
 
   @column()
-  public keyswords: string
-
-  @column()
   public status: number
 
   @column()
