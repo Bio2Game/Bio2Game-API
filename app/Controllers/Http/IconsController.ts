@@ -48,8 +48,6 @@ export default class IconsController {
         },
       })
 
-      console.log(image)
-
       const iconName = `${lodash.snakeCase(image.fieldName)}.${new Date().getTime()}.${image.subtype}`
       await image.move(Application.makePath('files/icons'), { name: iconName })
       const icon = await Icon.create({ reference: iconName })

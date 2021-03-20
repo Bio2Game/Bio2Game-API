@@ -49,8 +49,6 @@ export default class FormationsController {
         messages: this.validation.messages,
       })
 
-      console.log(payload)
-
       const formation = await Formation.create(payload)
 
       await formation.related('quizzes').sync(payload.quizzes)

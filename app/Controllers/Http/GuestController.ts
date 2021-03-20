@@ -11,8 +11,6 @@ export default class AuthController {
     try {
       const guest = await Guest.create(request.only(['username']))
 
-      console.log(guest.serialize())
-
       const token = await auth.use('guest').login(guest)
 
       return token.toJSON()
