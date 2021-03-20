@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Quiz from 'App/Models/Quiz'
+import User from 'App/Models/User'
 import Question from 'App/Models/Question'
 
 enum Languages {
@@ -13,9 +14,15 @@ export default class QuizzesController {
     if(!auth.user) {
       return { quizzes: [] }
     }
-    const quizzes = await Quiz.query().where('contributor_id', auth.user.id)
-      .preload('author')
-      .preload('domain', (query) => query.preload('icon')).preload('questions')
+    let quizzes
+    if(auth.user instanceof User && auth.user!.status > 1) {
+      quizzes = await Quiz.query()
+        .preload('author')
+        .preload('domain', (query) => query.preload('icon')).preload('questions')
+    } else {
+      quizzes = await Quiz.query().where('contributor_id', auth.user.id)
+        .preload('domain', (query) => query.preload('icon')).preload('questions')
+    }
     return {
       quizzes: quizzes.map(quiz => ({
         ...quiz.serialize(),
