@@ -5,14 +5,14 @@ import Formation from 'App/Models/Formation'
 export default class FormationsController {
   public async index () {
     const formations = await Formation.query()
-      .preload('author').preload('quizzes')
+      .preload('author').preload('quizzes').preload('domain')
       .where('status', 1).orderBy('updated_at', 'desc')
     return { formations }
   }
 
   public async list () {
     const formations = await Formation.query()
-      .preload('author').preload('quizzes').orderBy('updated_at', 'desc')
+      .preload('author').preload('quizzes').preload('domain').orderBy('updated_at', 'desc')
     return { formations }
   }
 
@@ -58,6 +58,7 @@ export default class FormationsController {
         formation,
       }
     } catch (error) {
+      console.log(error)
       response.status(422).json({
         success: false,
         messages: error.messages,
