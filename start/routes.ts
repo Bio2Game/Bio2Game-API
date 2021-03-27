@@ -91,14 +91,6 @@ Route.group(() => {
       Route.post('/', 'IconsController.store')
       Route.delete('/:id', 'IconsController.delete')
     }).prefix('/icons')
-
-    Route.group(() => {
-      Route.get('/', 'FormationsController.list')
-      Route.get('/:id', 'FormationsController.show')
-      Route.post('/', 'FormationsController.store')
-      Route.patch('/:id', 'FormationsController.update')
-      Route.delete('/:id', 'FormationsController.delete')
-    }).prefix('/formations')
   }).prefix('/admin').middleware(['auth', 'admin'])
 
   Route.group(() => {
@@ -124,6 +116,14 @@ Route.group(() => {
       Route.patch('/:id', 'Contributor/QuestionsController.update')
       Route.delete('/:id', 'Contributor/QuestionsController.delete')
     }).prefix('/questions')
+
+    Route.group(() => {
+      Route.get('/', 'FormationsController.list')
+      Route.get('/:id', 'FormationsController.show')
+      Route.post('/', 'FormationsController.store')
+      Route.patch('/:id', 'FormationsController.update')
+      Route.delete('/:id', 'FormationsController.delete')
+    }).prefix('/formations')
   }).prefix('/contributor').middleware(['auth', 'contributor'])
 
   Route.group(() => {

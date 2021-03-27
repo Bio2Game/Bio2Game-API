@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Formation from 'App/Models/Formation'
+import User from 'App/Models/User'
 
 export default class FormationsController {
   public async index () {
@@ -10,9 +11,19 @@ export default class FormationsController {
     return { formations }
   }
 
-  public async list () {
-    const formations = await Formation.query()
-      .preload('author').preload('quizzes').preload('domain').orderBy('updated_at', 'desc')
+  public async list ({ auth }: HttpContextContract) {
+    if(!auth.user) {
+      return { formations: [] }
+    }
+    let formations
+    if(auth.user instanceof User && auth.user!.status > 1) {
+      formations = await Formation.query()
+        .preload('author').preload('quizzes').preload('domain').orderBy('updated_at', 'desc')
+    } else {
+      formations = await Formation.query().where('user_id', auth.user.id)
+        .preload('quizzes').preload('domain').orderBy('updated_at', 'desc')
+    }
+
     return { formations }
   }
 

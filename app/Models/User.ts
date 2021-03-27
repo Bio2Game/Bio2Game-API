@@ -77,7 +77,7 @@ export default class User extends BaseModel {
     }
   }
 
-  @hasMany(() => Quiz, { foreignKey: 'contributorId' })
+  @hasMany(() => Quiz, { foreignKey: 'contributorId', localKey: 'id' })
   public quizzes: HasMany<typeof Quiz>
 
   @hasMany(() => Comment)
