@@ -40,6 +40,9 @@ Route.group(() => {
       Route.post('/register', 'AuthController.register')
       Route.post('/login', 'AuthController.login')
       Route.post('/logout', 'AuthController.logout')
+
+      Route.post('/reset-password', 'AuthController.resetPassword')
+      Route.post('/change-password', 'AuthController.updatePasswordByToken')
     }).prefix('/user')
 
     Route.group(() => {
