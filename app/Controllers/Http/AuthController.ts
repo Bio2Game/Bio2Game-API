@@ -138,7 +138,7 @@ export default class AuthController {
         })
       }
 
-      userProvider.setRememberMeToken(string.generateRandom(20))
+      userProvider.setRememberMeToken(string.generateRandom(10))
       await auth.use('user').provider.updateRememberMeToken(userProvider)
 
       await Mail.send((message) => {
@@ -151,6 +151,7 @@ export default class AuthController {
               id: userProvider.user!.id,
               token: userProvider.getRememberMeToken(),
             }),
+            domain: process.env.WEB_URL || 'https://www.bio2game.com',
           })
       }).catch(() => null)
 
