@@ -1,7 +1,6 @@
 {
   "typescript": true,
   "commands": [
-    "./commands",
     "@adonisjs/core/build/commands",
     "@adonisjs/lucid/build/commands",
     "@adonisjs/repl/build/commands",
@@ -25,11 +24,16 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/session",
-    "@adonisjs/mail"
+    "@adonisjs/mail",
+    "@adonisjs/view"
   ],
   "metaFiles": [
     ".env",
-    ".adonisrc.json"
+    ".adonisrc.json",
+    {
+      "pattern": "views/**/*.edge",
+      "reloadServer": false
+    }
   ],
   "aceProviders": [
     "@adonisjs/repl"

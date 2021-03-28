@@ -41,6 +41,8 @@
     "@adonisjs/mail": "^5.2.3",
     "@adonisjs/repl": "^1.1.5",
     "@adonisjs/session": "^3.1.2",
+    "@adonisjs/view": "^3.1.0",
+    "@poppinss/utils": "^3.0.5",
     "@types/socket.io": "^2.1.11",
     "bcrypt": "^5.0.0",
     "lodash": "^4.17.15",

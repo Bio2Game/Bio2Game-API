@@ -31,7 +31,8 @@
       "@adonisjs/auth",
       "@adonisjs/session",
       "@adonisjs/repl",
-      "@adonisjs/mail"
+      "@adonisjs/mail",
+      "@adonisjs/view"
     ]
   }
 }
