@@ -6,7 +6,16 @@ import User from 'App/Models/User'
 export default class UsersController {
   public async index () {
     const contributors = await User.query()
-      .preload('quizzes', (query) => query.limit(5).preload('domain', (query) => query.preload('icon')))
+      .where('status', '>', 0)
+      .preload('quizzes', (query) =>
+        query
+          .where('status', 1)
+          .preload('domain', (query) => query.preload('icon'))
+          .limit(5)
+      )
+      .whereHas('quizzes', (query) => {
+        query.where('status', 1)
+      })
     return { contributors }
   }
 
