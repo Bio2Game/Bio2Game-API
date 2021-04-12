@@ -69,7 +69,7 @@ export default class UsersSchema extends BaseSchema {
       table.integer('profil').notNullable().defaultTo(0)
       table.string('question').notNullable()
       table.json('responses').notNullable()
-      table.text('explication').notNullable().defaultTo('')
+      table.text('explication').notNullable()
       table.string ('source').notNullable().defaultTo('')
       table.integer('nbOfPoint').unsigned().notNullable().defaultTo(0)
       table.integer('nbOPlus').notNullable().defaultTo(0)
