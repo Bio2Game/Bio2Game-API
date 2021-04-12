@@ -150,6 +150,7 @@ export default class QuizzesController {
         domainId: schema.number([
           rules.exists({ table: 'domains', column: 'id' }),
         ]),
+        level: schema.number(),
         language: schema.enum(Object.values(Languages)),
         localisation: schema.string.optional({}, [
           rules.maxLength(255),
@@ -169,6 +170,7 @@ export default class QuizzesController {
         'contributorId.exists': 'Ce contributeur n\'existe pas.',
         'domainId.required': 'Veuillez renseigner l\'id du domaine associé.',
         'domainId.exists': 'Ce domaine n\'existe pas.',
+        'level.required': 'Veuillez renseigner le niveau du public.',
         'localisation.maxLength': 'Votre localisation ne peux pas dépasser {{ maxLength }} caractères.',
       },
     }
