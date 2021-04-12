@@ -106,6 +106,8 @@ Route.group(() => {
   }).prefix('/quiz')
 
   Route.group(() => {
+    Route.get('/domains', 'DomainsController.index')
+
     Route.group(() => {
       Route.get('/', 'Contributor/QuizzesController.index')
       Route.post('/', 'Contributor/QuizzesController.store')
