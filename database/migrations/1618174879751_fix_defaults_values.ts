@@ -5,7 +5,7 @@ export default class FixDefaultsValues extends BaseSchema {
 
   public async up () {
     this.schema.table('questions', (table) => {
-      table.string('explication').notNullable().defaultTo('').alter()
+      table.text('explication').nullable().alter()
     })
   }
 
