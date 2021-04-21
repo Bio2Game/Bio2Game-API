@@ -16,7 +16,7 @@ export default class FormationsController {
       return { formations: [] }
     }
     let formations
-    if(auth.user instanceof User && auth.user!.status > 1) {
+    if(auth.user instanceof User && auth.user!.status > 999) {
       formations = await Formation.query()
         .preload('author')
         .preload('quizzes')

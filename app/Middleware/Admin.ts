@@ -6,7 +6,7 @@ import User from 'App/Models/User'
 export default class Admin {
   public async handle ({ auth }: HttpContextContract, next: () => Promise<void>) {
     // code for middleware goes here. ABOVE THE NEXT CALL
-    if(!(auth.user instanceof User && auth.user.status > 1)) {
+    if(!(auth.user instanceof User && auth.user.status > 999)) {
     /**
      * Unable to authenticate as admin
      */

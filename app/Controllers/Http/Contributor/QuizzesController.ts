@@ -15,7 +15,7 @@ export default class QuizzesController {
       return { quizzes: [] }
     }
     let quizzes
-    if(auth.user instanceof User && auth.user!.status > 1) {
+    if(auth.user instanceof User && auth.user!.status > 999) {
       quizzes = await Quiz.query()
         .preload('author')
         .preload('domain', (query) => query.preload('icon')).preload('questions')
