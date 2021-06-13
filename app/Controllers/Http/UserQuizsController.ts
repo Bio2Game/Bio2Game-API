@@ -64,24 +64,4 @@ export default class UserQuizsController {
 
     return { success: true, response }
   }
-
-  //   async autoresponse ({auth,params, session}){
-  //       const question = await Question.find(params.id);
-
-  //       const infos = {
-  //         responsTimeSpent: question.time,
-  //         questionId: question.id,
-  //         quizId: question.quizId,
-  //         response: "Pas de réponse",
-  //         reponsNb: 3
-  //       }
-
-  //       if(!auth.user){
-  //         infos.simpleUserId = session.get('simpleAuth');
-  //       }else{
-  //         infos.userId = auth.user.id;
-  //       }
-
-  //       Response.create(infos)
-  //   }
 }
