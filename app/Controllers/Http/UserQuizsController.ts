@@ -25,7 +25,7 @@ export default class UserQuizsController {
       .preload('questions', (query) =>
         query.where('status', 1)
           .preload('user_response', query =>
-            query.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
+            query.where(`${authMethod}Id`, auth.use(authMethod).user!.id).where('type', params.type)
           ).orderBy('id')
       ).first()
 
@@ -59,6 +59,7 @@ export default class UserQuizsController {
       responsTimeSpent: data.time,
       userId: auth.use('user').user?.id,
       guestId: auth.use('guest').user?.id,
+      type: params.type,
     })
 
     return { success: true, response }

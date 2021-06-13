@@ -30,6 +30,9 @@ export default class Response extends BaseModel {
   @column()
   public reponsNb: number
 
+  @column()
+  public type: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
