@@ -6,12 +6,10 @@
  */
 
 import Env from '@ioc:Adonis/Core/Env'
-import { OrmConfig } from '@ioc:Adonis/Lucid/Orm'
 import Application from '@ioc:Adonis/Core/Application'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
-// import { LucidModel } from '@ioc:Adonis/Lucid/Model'
 
-const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
+const databaseConfig: DatabaseConfig = {
   /*
   |--------------------------------------------------------------------------
   | Connection
@@ -22,7 +20,7 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
   | file.
   |
   */
-  connection: Env.get('DB_CONNECTION', 'sqlite') as string,
+  connection: Env.get('DB_CONNECTION', 'sqlite'),
 
   connections: {
     /*
@@ -41,8 +39,12 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
       connection: {
         filename: Application.tmpPath('db.sqlite3'),
       },
+      migrations: {
+        naturalSort: true,
+      },
       useNullAsDefault: true,
       healthCheck: false,
+      debug: false,
     },
 
     /*
@@ -65,7 +67,11 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
         password: Env.get('DB_PASSWORD', 'lucid') as string,
         database: Env.get('DB_NAME', 'lucid') as string,
       },
+      migrations: {
+        naturalSort: true,
+      },
       healthCheck: false,
+      debug: false,
     },
 
     /*
@@ -88,23 +94,12 @@ const databaseConfig: DatabaseConfig & { orm: Partial<OrmConfig> } = {
         password: Env.get('DB_PASSWORD', 'lucid') as string,
         database: Env.get('DB_NAME', 'lucid') as string,
       },
+      migrations: {
+        naturalSort: true,
+      },
       healthCheck: false,
+      debug: false,
     },
-  },
-
-  /*
-  |--------------------------------------------------------------------------
-  | Orm Configuration
-  |--------------------------------------------------------------------------
-  |
-  | Following are some of the configuration options to tweak the conventional
-  | settings of the ORM. For example:
-  |
-  | - Define a custom function to compute the default table name for a given model.
-  | - Or define a custom function to compute the primary key for a given model.
-  |
-  */
-  orm: {
   },
 }
 

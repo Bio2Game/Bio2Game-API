@@ -18,7 +18,7 @@ import { AuthConfig } from '@ioc:Adonis/Addons/Auth'
 */
 const authConfig: AuthConfig = {
   guard: 'user',
-  list: {
+  guards: {
     /*
     |--------------------------------------------------------------------------
     | OAT Guard

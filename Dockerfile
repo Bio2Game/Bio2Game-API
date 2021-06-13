@@ -1,17 +1,18 @@
-FROM node:14 as builder
+FROM node:14:15:4 as builder
 WORKDIR /app
+COPY .env.example ./.env
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
-RUN npm run build --production
+RUN npm run build
+RUN rm build/.env
 
-FROM node:14
+FROM node::14:15:4
 WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
+ENV NODE_ENV production
+COPY --from=builder /app/build ./
 COPY package*.json ./
-
+RUN npm ci
+RUN node ace generate:manifest
 EXPOSE 6002
-
-CMD [ "node", "./build/server.js" ]
+CMD [ "node", "server.js" ]
