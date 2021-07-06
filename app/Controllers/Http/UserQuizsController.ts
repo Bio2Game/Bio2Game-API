@@ -23,10 +23,12 @@ export default class UserQuizsController {
         id: params.id,
       })
       .preload('questions', (query) =>
-        query.where('status', 1)
-          .preload('user_response', query =>
-            query.where(`${authMethod}Id`, auth.use(authMethod).user!.id).where('type', params.type)
-          ).orderBy('id')
+        params.type === 'quiz' ?
+          query.where('status', 1)
+            .preload('user_response', query =>
+              query.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
+            ).orderBy('id') :
+          query.where('status', 1)
       ).first()
 
     if(!quiz) {
