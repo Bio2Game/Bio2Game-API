@@ -34,7 +34,12 @@ export default class FormationsController {
 
   public async show ({ response, params }: HttpContextContract){
     try {
-      const formation = await Formation.query().preload('quizzes').where('id', params.id).first()
+      const formation = await Formation.query()
+        .preload('quizzes',
+          (query) => query.preload('domain',
+            (query) => query.preload('icon')
+          )
+        ).where('id', params.id).first()
 
       if(!formation) {
         response.status(404).json({ success: false })
