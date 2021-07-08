@@ -70,7 +70,7 @@ export default class UsersController {
 
       response.status(422).json({
         success: false,
-        messages: error.messages,
+        messages: error.messages || error,
       })
     }
   }
