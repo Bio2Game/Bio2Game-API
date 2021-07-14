@@ -42,7 +42,7 @@ export default class UsersController {
       old_password: schema.string.optional({ trim: true }, [
         rules.exists({ table: 'users', column: 'password' }),
       ]),
-      password: schema.string.optional({ trim: true }),
+      password: schema.string.optional({ trim: true }, [rules.confirmed()]),
       sex: schema.number.optional(),
       birth_date: schema.date.optional(),
       localisation: schema.string.optional({ trim: true }),
@@ -60,7 +60,7 @@ export default class UsersController {
           'email.email': 'Merci de rentrer une adresse email valide.',
           'email.unique': 'Cette adresse email est déjà utilisé.',
           'old_password.exists': 'Le mot de passe est incorect.',
-          'password.confirmed': 'Veuillez confirmer votre mot de passe.',
+          'confirmed': 'Veuillez confirmer votre mot de passe.',
         },
       })
 
