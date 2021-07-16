@@ -54,6 +54,7 @@ export default class AuthController {
       response.status(500).json({
         success: false,
         messages: error.messages,
+        error: error,
       })
     }
   }
@@ -88,6 +89,7 @@ export default class AuthController {
               message: 'Cette adresse email n\'existe pas.',
             }],
           },
+          error: error,
         })
       }
       if(error.code === 'E_INVALID_AUTH_PASSWORD') {
@@ -100,11 +102,13 @@ export default class AuthController {
               message: 'Ce mot de passe est incorrect.',
             }],
           },
+          error: error,
         })
       }
       response.status(401).json({
         success: false,
-        messages: error.messages || error,
+        messages: error.messages,
+        error: error,
       })
     }
   }
