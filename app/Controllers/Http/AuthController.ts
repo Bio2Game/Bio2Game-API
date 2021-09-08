@@ -54,7 +54,7 @@ export default class AuthController {
       response.status(500).json({
         success: false,
         messages: error.messages,
-        error: error,
+        error,
       })
     }
   }
@@ -170,6 +170,7 @@ export default class AuthController {
       return response.status(500).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
@@ -236,6 +237,7 @@ export default class AuthController {
       return response.status(500).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }

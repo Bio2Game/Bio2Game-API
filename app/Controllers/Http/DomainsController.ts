@@ -27,7 +27,7 @@ export default class DomainsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
-        error: error,
+        error,
       })
     }
   }
@@ -65,7 +65,7 @@ export default class DomainsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
-        error: error,
+        error,
       })
     }
   }
@@ -111,7 +111,7 @@ export default class DomainsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
-        error: error,
+        error,
       })
     }
   }
@@ -134,7 +134,7 @@ export default class DomainsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
-        error: error,
+        error,
       })
     }
   }

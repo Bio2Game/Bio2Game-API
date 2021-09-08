@@ -50,6 +50,7 @@ export default class QuizzesController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
@@ -77,6 +78,7 @@ export default class QuizzesController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
@@ -112,6 +114,7 @@ export default class QuizzesController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
@@ -152,6 +155,7 @@ export default class QuizzesController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
@@ -177,6 +181,7 @@ export default class QuizzesController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }

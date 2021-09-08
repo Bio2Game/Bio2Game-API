@@ -24,7 +24,7 @@ export default class QuestionsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
-        error: error,
+        error,
       })
     }
   }
