@@ -20,12 +20,13 @@ export default class QuestionsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
 
   public async store ({ request, response, auth }: HttpContextContract){
-    const data = request.only(['quiz_id'])
+    const data = request.only(['quizId'])
 
     try {
       const payload = await request.validate({
@@ -34,11 +35,11 @@ export default class QuestionsController {
             rules.unique({
               table: 'questions',
               column: 'label',
-              where: { 'quiz_id': data.quiz_id },
+              where: { 'quiz_id': data.quizId },
             }),
             rules.maxLength(255),
           ]),
-          quiz_id: schema.number([
+          quizId: schema.number([
             rules.exists({ table: 'quizzes', column: 'id', where: { 'contributor_id': auth?.user?.id } }),
           ]),
           ...this.validation.schema,
@@ -53,15 +54,17 @@ export default class QuestionsController {
         question,
       }
     } catch (error) {
+      console.log(error)
       response.status(422).json({
         success: false,
-        messages: error.messages || error,
+        messages: error.messages,
+        error,
       })
     }
   }
 
   public async update ({ request, response, params, auth }: HttpContextContract){
-    const data = request.only(['quiz_id'])
+    const data = request.only(['quizId'])
 
     try {
       const question = await Question.find(params.id)
@@ -76,12 +79,12 @@ export default class QuestionsController {
             rules.unique({
               table: 'questions',
               column: 'label',
-              where: { 'quiz_id': data.quiz_id },
+              where: { 'quiz_id': data.quizId },
               whereNot: { 'id': params.id },
             }),
             rules.maxLength(255),
           ]),
-          quiz_id: schema.number([
+          quizId: schema.number([
             rules.exists({ table: 'quizzes', column: 'id', where: { 'contributor_id': auth?.user?.id } }),
           ]),
           ...this.validation.schema,
@@ -101,6 +104,7 @@ export default class QuestionsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
@@ -122,6 +126,7 @@ export default class QuestionsController {
       response.status(422).json({
         success: false,
         messages: error.messages,
+        error,
       })
     }
   }
