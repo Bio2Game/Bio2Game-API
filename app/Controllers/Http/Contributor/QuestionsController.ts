@@ -121,6 +121,7 @@ export default class QuestionsController {
 
       return {
         success: true,
+        question,
       }
     } catch (error) {
       response.status(422).json({

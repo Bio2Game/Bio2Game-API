@@ -176,6 +176,7 @@ export default class QuizzesController {
 
       return {
         success: true,
+        quiz,
       }
     } catch (error) {
       response.status(422).json({
