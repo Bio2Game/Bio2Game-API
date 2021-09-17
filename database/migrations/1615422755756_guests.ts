@@ -3,7 +3,7 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class Guests extends BaseSchema {
   protected tableName = 'guests'
 
-  public async up () {
+  public async up() {
     this.schema.createTable('guests', (table) => {
       table.string('id').primary()
       table.string('username', 255).notNullable()
@@ -27,7 +27,7 @@ export default class Guests extends BaseSchema {
     this.schema.renameTable('api_tokens', 'user_tokens')
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable('guest_tokens')
     this.schema.dropTable('guests')
 

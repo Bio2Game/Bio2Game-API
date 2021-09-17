@@ -13,11 +13,7 @@
     "Config": "config",
     "Database": "database"
   },
-  "preloads": [
-    "./start/routes",
-    "./start/kernel",
-    "./start/hashDriver"
-  ],
+  "preloads": ["./start/routes", "./start/kernel", "./start/hashDriver"],
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
@@ -35,7 +31,5 @@
       "reloadServer": false
     }
   ],
-  "aceProviders": [
-    "@adonisjs/repl"
-  ]
+  "aceProviders": ["@adonisjs/repl"]
 }

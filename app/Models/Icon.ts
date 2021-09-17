@@ -6,7 +6,7 @@ export default class Icon extends BaseModel {
   public id: number
 
   @column()
-  public reference :string
+  public reference: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

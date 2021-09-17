@@ -13,11 +13,9 @@
 import 'reflect-metadata'
 import { Ignitor } from '@adonisjs/core/build/standalone'
 
-const server = new Ignitor(__dirname)
-  .httpServer()
+const server = new Ignitor(__dirname).httpServer()
 
-server.start()
-  .catch(console.error)
+server.start().catch(console.error)
 
 process.on('SIGINT', () => {
   server.kill(10)

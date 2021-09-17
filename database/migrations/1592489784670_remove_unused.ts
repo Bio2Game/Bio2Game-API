@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class UsersSchema extends BaseSchema {
-  public async up () {
+  public async up() {
     this.schema.table('users', (table) => {
       table.renameColumn('pseudo', 'username')
       table.renameColumn('mobilContributor', 'mobileContributor')
@@ -27,7 +27,7 @@ export default class UsersSchema extends BaseSchema {
         'nbOfMinus',
         'natureCode',
         'uniqId',
-        'startDate' ,
+        'startDate',
         'endDate',
         'language'
       )
@@ -58,7 +58,7 @@ export default class UsersSchema extends BaseSchema {
     this.schema.dropTable('usersLangues')
   }
 
-  public async down () {
+  public async down() {
     this.schema.table('users', (table) => {
       table.renameColumn('username', 'pseudo')
       table.date('lastConnexionDate')
@@ -72,7 +72,7 @@ export default class UsersSchema extends BaseSchema {
     this.schema.table('domains', (table) => {
       table.date('activationDate')
       table.date('endDate')
-      table.string('uniqName',30).notNullable().unique()
+      table.string('uniqName', 30).notNullable().unique()
     })
 
     this.schema.table('questions', (table) => {
@@ -153,27 +153,27 @@ export default class UsersSchema extends BaseSchema {
 
     this.schema.createTable('geolocalisationType', (table) => {
       table.increments()
-      table.integer('code',3).unsigned().notNullable()
+      table.integer('code', 3).unsigned().notNullable()
       table.integer('label').notNullable()
       table.timestamps()
     })
 
     this.schema.createTable('languages', (table) => {
       table.increments()
-      table.integer('code',3).unsigned().notNullable()
+      table.integer('code', 3).unsigned().notNullable()
       table.string('label').notNullable()
       table.timestamps()
     })
     this.schema.createTable('country', (table) => {
       table.increments()
-      table.integer('code',3).unsigned().notNullable()
+      table.integer('code', 3).unsigned().notNullable()
       table.string('label').notNullable()
       table.timestamps()
     })
     this.schema.createTable('usersLangues', (table) => {
       table.increments()
       table.integer('userId').unsigned().notNullable()
-      table.string('langueCode',3).notNullable()
+      table.string('langueCode', 3).notNullable()
       table.foreign('userId')
       table.foreign('langueCode')
       table.timestamps()

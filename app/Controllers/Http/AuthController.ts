@@ -8,12 +8,12 @@ import Encryption from '@ioc:Adonis/Core/Encryption'
 import { string } from '@poppinss/utils/build/helpers'
 
 export default class AuthController {
-  public async user ({ auth }: HttpContextContract) {
+  public async user({ auth }: HttpContextContract) {
     const user = await auth.use('user').authenticate()
     return user ? user.toJSON() : false
   }
 
-  public async register ({ request, response }: HttpContextContract) {
+  public async register({ request, response }: HttpContextContract) {
     const validationSchema = schema.create({
       username: schema.string({ trim: true }, [
         rules.unique({ table: 'users', column: 'username' }),
@@ -45,7 +45,7 @@ export default class AuthController {
         message: 'Merci de vous être inscrit !',
       })
     } catch (error) {
-      if(error.code === 'E_VALIDATION_FAILURE') {
+      if (error.code === 'E_VALIDATION_FAILURE') {
         return response.status(422).json({
           success: false,
           messages: error.messages,
@@ -59,9 +59,9 @@ export default class AuthController {
     }
   }
 
-  public async login ({ auth, request, response }: HttpContextContract) {
+  public async login({ auth, request, response }: HttpContextContract) {
     const validationSchema = schema.create({
-      email: schema.string({ trim: true }, [ rules.email() ]),
+      email: schema.string({ trim: true }, [rules.email()]),
       password: schema.string({ trim: true }),
     })
 
@@ -79,28 +79,32 @@ export default class AuthController {
 
       return token.toJSON()
     } catch (error) {
-      if(error.code === 'E_INVALID_AUTH_UID') {
+      if (error.code === 'E_INVALID_AUTH_UID') {
         return response.status(401).json({
           success: false,
           messages: {
-            errors: [{
-              rule: 'exist',
-              field: 'email',
-              message: 'Cette adresse email n\'existe pas.',
-            }],
+            errors: [
+              {
+                rule: 'exist',
+                field: 'email',
+                message: "Cette adresse email n'existe pas.",
+              },
+            ],
           },
           error: error,
         })
       }
-      if(error.code === 'E_INVALID_AUTH_PASSWORD') {
+      if (error.code === 'E_INVALID_AUTH_PASSWORD') {
         return response.status(401).json({
           success: false,
           messages: {
-            errors: [{
-              rule: 'exist',
-              field: 'password',
-              message: 'Ce mot de passe est incorrect.',
-            }],
+            errors: [
+              {
+                rule: 'exist',
+                field: 'password',
+                message: 'Ce mot de passe est incorrect.',
+              },
+            ],
           },
           error: error,
         })
@@ -113,9 +117,9 @@ export default class AuthController {
     }
   }
 
-  public async resetPassword ({ auth, request, response }: HttpContextContract) {
+  public async resetPassword({ auth, request, response }: HttpContextContract) {
     const validationSchema = schema.create({
-      email: schema.string({ trim: true }, [ rules.email() ]),
+      email: schema.string({ trim: true }, [rules.email()]),
     })
 
     try {
@@ -129,15 +133,17 @@ export default class AuthController {
 
       const userProvider = await auth.use('user').provider.findByUid(email)
 
-      if(!userProvider.user) {
+      if (!userProvider.user) {
         return response.status(404).json({
           success: false,
           messages: {
-            errors: [{
-              rule: 'exist',
-              field: 'email',
-              message: 'Cette adresse email n\'existe pas.',
-            }],
+            errors: [
+              {
+                rule: 'exist',
+                field: 'email',
+                message: "Cette adresse email n'existe pas.",
+              },
+            ],
           },
         })
       }
@@ -161,7 +167,7 @@ export default class AuthController {
 
       return response.json({ success: true })
     } catch (error) {
-      if(error.code === 'E_VALIDATION_FAILURE') {
+      if (error.code === 'E_VALIDATION_FAILURE') {
         return response.status(422).json({
           success: false,
           messages: error.messages,
@@ -175,10 +181,10 @@ export default class AuthController {
     }
   }
 
-  public async updatePasswordByToken ({ auth, request, response }: HttpContextContract) {
+  public async updatePasswordByToken({ auth, request, response }: HttpContextContract) {
     const validationSchema = schema.create({
       token: schema.string({ trim: true }),
-      password: schema.string({ trim: true }, [ rules.confirmed() ]),
+      password: schema.string({ trim: true }, [rules.confirmed()]),
     })
 
     try {
@@ -193,30 +199,36 @@ export default class AuthController {
 
       const payload: any = Encryption.decrypt(token)
 
-      if(!payload || !payload.id || !payload.token) {
+      if (!payload || !payload.id || !payload.token) {
         return response.status(404).json({
           success: false,
           messages: {
-            errors: [{
-              rule: 'invalid',
-              field: 'token',
-              message: 'Ce token est invalide',
-            }],
+            errors: [
+              {
+                rule: 'invalid',
+                field: 'token',
+                message: 'Ce token est invalide',
+              },
+            ],
           },
         })
       }
 
-      const userProvider = await auth.use('user').provider.findByRememberMeToken(payload.id, payload.token)
+      const userProvider = await auth
+        .use('user')
+        .provider.findByRememberMeToken(payload.id, payload.token)
 
-      if(!userProvider.user) {
+      if (!userProvider.user) {
         return response.status(404).json({
           success: false,
           messages: {
-            errors: [{
-              rule: 'exist',
-              field: 'email',
-              message: 'Cette adresse email n\'existe pas.',
-            }],
+            errors: [
+              {
+                rule: 'exist',
+                field: 'email',
+                message: "Cette adresse email n'existe pas.",
+              },
+            ],
           },
         })
       }
@@ -228,7 +240,7 @@ export default class AuthController {
 
       return response.json({ success: true })
     } catch (error) {
-      if(error.code === 'E_VALIDATION_FAILURE') {
+      if (error.code === 'E_VALIDATION_FAILURE') {
         return response.status(422).json({
           success: false,
           messages: error.messages,
@@ -242,7 +254,7 @@ export default class AuthController {
     }
   }
 
-  public async logout ({ auth, response }: HttpContextContract) {
+  public async logout({ auth, response }: HttpContextContract) {
     await auth.use('user').logout()
 
     response.status(200).json({

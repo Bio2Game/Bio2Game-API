@@ -4,16 +4,16 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
 
 export default class UsersController {
-  public async index () {
+  public async index() {
     const users = await User.query().orderBy('created_at', 'desc')
     return { success: true, users }
   }
 
-  public async show ({ response, params }: HttpContextContract){
+  public async show({ response, params }: HttpContextContract) {
     try {
       const user = await User.find(params.id)
 
-      if(!user) {
+      if (!user) {
         response.status(404).json({ success: false })
       }
 
@@ -30,15 +30,15 @@ export default class UsersController {
     }
   }
 
-  public async update ({ request, response, params }: HttpContextContract) {
+  public async update({ request, response, params }: HttpContextContract) {
     const validationSchema = schema.create({
       username: schema.string.optional({ trim: true }, [
-        rules.unique({ table: 'users', column: 'username', whereNot: { 'id': params.id } }),
+        rules.unique({ table: 'users', column: 'username', whereNot: { id: params.id } }),
       ]),
       name: schema.string.optional({ trim: true }),
       email: schema.string.optional({ trim: true }, [
         rules.email(),
-        rules.unique({ table: 'users', column: 'email', whereNot: { 'id': params.id } }),
+        rules.unique({ table: 'users', column: 'email', whereNot: { id: params.id } }),
       ]),
       old_password: schema.string.optional({ trim: true }, [
         rules.exists({ table: 'users', column: 'password' }),
@@ -86,11 +86,11 @@ export default class UsersController {
     }
   }
 
-  public async delete ({ response, params }: HttpContextContract){
+  public async delete({ response, params }: HttpContextContract) {
     try {
       const user = await User.find(params.id)
 
-      if(!user) {
+      if (!user) {
         response.status(404).json({ success: false })
       }
 

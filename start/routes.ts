@@ -21,12 +21,12 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
-  return 'Bienvenue sur l\'api privé de Bio2Game, vous n\'avez rien a faire ici :c'
+  return "Bienvenue sur l'api privé de Bio2Game, vous n'avez rien a faire ici :c"
 })
 
 Route.group(() => {
   Route.get('/', async () => {
-    return 'Bienvenue sur l\'api privé de Bio2Game, vous n\'avez rien a faire ici :c'
+    return "Bienvenue sur l'api privé de Bio2Game, vous n'avez rien a faire ici :c"
   })
 
   Route.group(() => {
@@ -94,11 +94,15 @@ Route.group(() => {
       Route.post('/', 'IconsController.store')
       Route.delete('/:id', 'IconsController.delete')
     }).prefix('/icons')
-  }).prefix('/admin').middleware(['auth', 'admin'])
+  })
+    .prefix('/admin')
+    .middleware(['auth', 'admin'])
 
   Route.group(() => {
     Route.patch('/', 'UsersController.update')
-  }).prefix('/user').middleware('auth')
+  })
+    .prefix('/user')
+    .middleware('auth')
 
   Route.group(() => {
     Route.get('/:id/:type', 'UserQuizsController.show')
@@ -129,7 +133,9 @@ Route.group(() => {
       Route.patch('/:id', 'FormationsController.update')
       Route.delete('/:id', 'FormationsController.delete')
     }).prefix('/formations')
-  }).prefix('/contributor').middleware(['auth', 'contributor'])
+  })
+    .prefix('/contributor')
+    .middleware(['auth', 'contributor'])
 
   Route.group(() => {
     Route.post('/upload', 'Contributor/ImageController.store')

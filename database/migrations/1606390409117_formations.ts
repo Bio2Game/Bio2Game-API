@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class Formations extends BaseSchema {
-  public async up () {
+  public async up() {
     this.schema.createTable('formations', (table) => {
       table.increments('id')
       table.string('label').notNullable().unique()
@@ -23,7 +23,7 @@ export default class Formations extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable('formations')
     this.schema.dropTable('formation_quiz')
   }

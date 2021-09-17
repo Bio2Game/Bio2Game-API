@@ -7,12 +7,12 @@ export default class Timer {
   public resolve: any
   public timeLeftAtPause: number
 
-  constructor (time: number) {
+  constructor(time: number) {
     this.time = time
   }
 
-  public start () {
-    return new Promise(resolve => {
+  public start() {
+    return new Promise((resolve) => {
       this.resolve = resolve
       this.startDate = Date.now()
 
@@ -20,30 +20,30 @@ export default class Timer {
     })
   }
 
-  public getCurrentTime () {
+  public getCurrentTime() {
     return this.startDate ? Date.now() - this.startDate : 0
   }
 
-  public getTimeLeft () {
+  public getTimeLeft() {
     return this.time - this.getCurrentTime()
   }
 
-  public pause () {
+  public pause() {
     clearTimeout(this.timeout)
     this.timeLeftAtPause = this.time - (Date.now() - this.startDate)
   }
 
-  public resume () {
+  public resume() {
     this.timeout = setTimeout(this.resolve, this.timeLeftAtPause)
     this.startDate = Date.now() - (this.time - this.timeLeftAtPause)
   }
 
-  public stop () {
+  public stop() {
     clearTimeout(this.timeout)
     this.resolve()
   }
 
-  public serialize () {
+  public serialize() {
     return {
       timeLeft: this.getTimeLeft(),
       current: this.getCurrentTime(),

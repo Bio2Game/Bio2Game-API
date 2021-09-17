@@ -31,7 +31,7 @@ export default class Game {
   public party: Party
   public started: boolean
 
-  constructor (manager: GameManager, name: string, questions: Question[], animatorId: number) {
+  constructor(manager: GameManager, name: string, questions: Question[], animatorId: number) {
     this.id = this.createCode()
     this.name = name
     this.questions = questions
@@ -46,7 +46,7 @@ export default class Game {
     this.started = false
   }
 
-  public onConnect (socket: Socket, { user }: UserAuthPayload) {
+  public onConnect(socket: Socket, { user }: UserAuthPayload) {
     if (user && user.id === this.animatorId) {
       if (this.animator) {
         this.animator.socket.disconnect()
@@ -59,7 +59,11 @@ export default class Game {
       return this.animator.connection()
     }
 
-    if(this.bannedPlayers.some(player => player.id === user.id || player.ip === socket.conn.remoteAddress)) {
+    if (
+      this.bannedPlayers.some(
+        (player) => player.id === user.id || player.ip === socket.conn.remoteAddress
+      )
+    ) {
       socket.emit('gameError', {
         error: 403,
         message: 'Vous avez été banni de cette partie.',
@@ -67,14 +71,14 @@ export default class Game {
       return socket.disconnect()
     }
 
-    const playerExists = this.players.find(player => player.id === user.id)
+    const playerExists = this.players.find((player) => player.id === user.id)
 
     if (playerExists) {
       playerExists.socket.disconnect()
       playerExists.socket = socket
 
       return playerExists.connection()
-    } else if(this.status > 0) {
+    } else if (this.status > 0) {
       socket.emit('gameError', {
         error: 403,
         message: 'Cette partie a déjà été lancé.',
@@ -82,7 +86,7 @@ export default class Game {
       return socket.disconnect()
     }
 
-    if (this.players.some(player => player.id === user.id)) {
+    if (this.players.some((player) => player.id === user.id)) {
       return socket.disconnect()
     }
 
@@ -92,8 +96,8 @@ export default class Game {
     return player.connection()
   }
 
-  public async start () {
-    if(this.started) {
+  public async start() {
+    if (this.started) {
       return
     }
 
@@ -104,14 +108,16 @@ export default class Game {
     this.party.$attributes = {
       code: this.id,
       name: this.name,
-      questionsList: JSON.stringify(this.questions.map(question => {
-        return {
-          id: question.id,
-          label: question.label,
-          question: question.question,
-          responses: JSON.parse(question.responses),
-        }
-      })),
+      questionsList: JSON.stringify(
+        this.questions.map((question) => {
+          return {
+            id: question.id,
+            label: question.label,
+            question: question.question,
+            responses: JSON.parse(question.responses),
+          }
+        })
+      ),
       questionsSize: this.questions.length,
       playersSize: this.players.length,
       contributorId: this.animatorId,
@@ -147,7 +153,7 @@ export default class Game {
 
     this.status = 3
 
-    this.finished = new Timer(2* 60 * 1000)
+    this.finished = new Timer(2 * 60 * 1000)
 
     this.room.emit('game', this.serialize())
 
@@ -156,8 +162,8 @@ export default class Game {
     return this.stop()
   }
 
-  public setPause () {
-    if(this.finished) {
+  public setPause() {
+    if (this.finished) {
       return
     }
     this.pause = true
@@ -165,8 +171,8 @@ export default class Game {
     this.room.emit('pause')
   }
 
-  public setResume () {
-    if(this.finished) {
+  public setResume() {
+    if (this.finished) {
       return
     }
     this.pause = false
@@ -183,17 +189,17 @@ export default class Game {
     })
   }
 
-  public async stop () {
+  public async stop() {
     const users = [...this.players, this.animator]
-    await Promise.all(users.map(async user => await user.socket.disconnect()))
+    await Promise.all(users.map(async (user) => await user.socket.disconnect()))
     this.manager.deleteGame(this.id)
   }
 
-  public onlinePlayers () {
-    return this.players.filter(u => u.isOnline)
+  public onlinePlayers() {
+    return this.players.filter((u) => u.isOnline)
   }
 
-  public createCode () {
+  public createCode() {
     const caracters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'
     let code = ''
     for (let i = 0; i < 8; i++) {
@@ -202,7 +208,7 @@ export default class Game {
     return code
   }
 
-  public serialize (){
+  public serialize() {
     return {
       id: this.id,
       name: this.name,
@@ -213,7 +219,7 @@ export default class Game {
       animatorId: this.animatorId,
       animator: this.animator ? this.animator.serialize() : null,
       startDate: this.startDate,
-      players: this.players.map(player => player.serialize()),
+      players: this.players.map((player) => player.serialize()),
       pause: this.pause,
     }
   }

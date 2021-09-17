@@ -8,26 +8,26 @@ export default class GameManager {
   public games: Game[] = []
   public io: Server
 
-  constructor (io: Server){
+  constructor(io: Server) {
     this.io = io
 
     io.on('connection', this.registerEvents.bind(this))
   }
 
-  public registerEvents (socket: Socket) {
+  public registerEvents(socket: Socket) {
     socket.on('joinGame', async ({ gameId, auth }: JoinGamePayload) => {
-      const game = this.games.find(game => game.id === gameId)
+      const game = this.games.find((game) => game.id === gameId)
 
-      if(!game) {
+      if (!game) {
         socket.emit('gameError', {
           error: 404,
-          message: 'Il semblerait que cette partie n\'existe pas ou soit terminé !',
+          message: "Il semblerait que cette partie n'existe pas ou soit terminé !",
         })
         console.log('Déconnexion game !')
         return socket.disconnect()
       }
 
-      if(!auth || !auth.user) {
+      if (!auth || !auth.user) {
         socket.emit('authError')
         console.log('Bad auth !')
         return socket.disconnect()
@@ -51,8 +51,8 @@ export default class GameManager {
     })
   }
 
-  public deleteGame (gameId: string) {
-    const gameIndex = this.games.findIndex(g => g.id === gameId)
+  public deleteGame(gameId: string) {
+    const gameIndex = this.games.findIndex((g) => g.id === gameId)
     this.games.splice(gameIndex, 1)
   }
 }

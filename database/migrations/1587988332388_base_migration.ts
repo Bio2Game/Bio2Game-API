@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class UsersSchema extends BaseSchema {
-  public async up () {
+  public async up() {
     this.schema.createTable('users', (table) => {
       table.increments('id').primary()
       table.string('pseudo').notNullable().unique()
@@ -9,7 +9,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('email').notNullable().unique()
       table.string('name').notNullable().defaultTo('')
       table.date('lastConnexionDate')
-      table.string('languageCode',3).defaultTo('FR')
+      table.string('languageCode', 3).defaultTo('FR')
       table.integer('sex').notNullable().defaultTo(0)
       table.date('birthDate')
       table.string('localisation').notNullable().defaultTo('')
@@ -45,7 +45,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('keyswords').notNullable()
       table.date('activationDate')
       table.date('endDate')
-      table.string('uniqName',30).notNullable().unique()
+      table.string('uniqName', 30).notNullable().unique()
       table.timestamps()
     })
 
@@ -70,7 +70,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('question').notNullable()
       table.json('responses').notNullable()
       table.text('explication').notNullable()
-      table.string ('source').notNullable().defaultTo('')
+      table.string('source').notNullable().defaultTo('')
       table.integer('nbOfPoint').unsigned().notNullable().defaultTo(0)
       table.integer('nbOPlus').notNullable().defaultTo(0)
       table.integer('nbOfMinus').notNullable().defaultTo(0)
@@ -78,7 +78,7 @@ export default class UsersSchema extends BaseSchema {
       table.integer('time').defaultTo(15)
       table.integer('natureCode')
       table.string('uniqId').notNullable().defaultTo('')
-      table.string('language',2).notNullable().defaultTo('FR')
+      table.string('language', 2).notNullable().defaultTo('FR')
       table.date('startDate')
       table.date('endDate').defaultTo(null)
       table.integer('quizId').unsigned().notNullable()
@@ -124,7 +124,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('label').notNullable().unique()
       table.string('description').notNullable()
       table.string('url').notNullable()
-      table.string('language',2).defaultTo('FR')
+      table.string('language', 2).defaultTo('FR')
       table.integer('domainId')
       table.integer('status').notNullable().defaultTo(0)
       table.integer('contributorId').unsigned()
@@ -173,26 +173,26 @@ export default class UsersSchema extends BaseSchema {
     })
     this.schema.createTable('geolocalisationType', (table) => {
       table.increments()
-      table.integer('code',3).unsigned().notNullable()
+      table.integer('code', 3).unsigned().notNullable()
       table.integer('label').notNullable()
       table.timestamps()
     })
     this.schema.createTable('languages', (table) => {
       table.increments()
-      table.integer('code',3).unsigned().notNullable()
+      table.integer('code', 3).unsigned().notNullable()
       table.string('label').notNullable()
       table.timestamps()
     })
     this.schema.createTable('country', (table) => {
       table.increments()
-      table.integer('code',3).unsigned().notNullable()
+      table.integer('code', 3).unsigned().notNullable()
       table.string('label').notNullable()
       table.timestamps()
     })
     this.schema.createTable('usersLangues', (table) => {
       table.increments()
       table.integer('userId').unsigned().notNullable()
-      table.string('langueCode',3).notNullable()
+      table.string('langueCode', 3).notNullable()
       table.foreign('userId')
       table.foreign('langueCode')
       table.timestamps()
@@ -230,7 +230,7 @@ export default class UsersSchema extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable('users')
     this.schema.dropTable('tokens')
     this.schema.dropTable('domains')

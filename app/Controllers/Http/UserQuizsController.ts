@@ -4,9 +4,9 @@ import Quiz from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
 
 export default class UserQuizsController {
-  public async show ({ params, auth, response }: HttpContextContract) {
+  public async show({ params, auth, response }: HttpContextContract) {
     let authMethod: 'user' | 'guest'
-    if(await auth.use('user').check()) {
+    if (await auth.use('user').check()) {
       authMethod = 'user'
     } else if (await auth.use('guest').check()) {
       authMethod = 'guest'
@@ -23,15 +23,18 @@ export default class UserQuizsController {
         id: params.id,
       })
       .preload('questions', (query) =>
-        params.type === 'quiz' ?
-          query.where('status', 1)
-            .preload('user_response', query =>
-              query.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
-            ).orderBy('id') :
-          query.where('status', 1)
-      ).first()
+        params.type === 'quiz'
+          ? query
+              .where('status', 1)
+              .preload('user_response', (query) =>
+                query.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
+              )
+              .orderBy('id')
+          : query.where('status', 1)
+      )
+      .first()
 
-    if(!quiz) {
+    if (!quiz) {
       return response.status(404).json({
         success: false,
         messages: 'Not found',
@@ -48,7 +51,7 @@ export default class UserQuizsController {
     }
   }
 
-  public async store ({ request, params, auth }: HttpContextContract){
+  public async store({ request, params, auth }: HttpContextContract) {
     const data = request.only(['question_id', 'response_id', 'response', 'time', 'strategy'])
 
     await auth.use(data.strategy).check()

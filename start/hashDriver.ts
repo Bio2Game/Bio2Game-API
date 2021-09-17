@@ -15,7 +15,7 @@ import Hash, { HashDriverContract } from '@ioc:Adonis/Core/Hash'
  * Implementation of custom bcrypt driver
  */
 class CustomBcryptDriver implements HashDriverContract {
-  constructor (private config: { saltRounds: number }) {}
+  constructor(private config: { saltRounds: number }) {}
 
   /**
    * Ignore these. The PHC format requires it
@@ -27,14 +27,14 @@ class CustomBcryptDriver implements HashDriverContract {
    * Has to be false, since bcrypt cannot find if password needs
    * a re-hash or not
    */
-  public needsReHash () {
+  public needsReHash() {
     return false
   }
 
   /**
    * Alias for [[this.make]]
    */
-  public hash (value: string) {
+  public hash(value: string) {
     process.emitWarning('DeprecationWarning', 'Hash.hash() is deprecated. Use Hash.make() instead')
     return this.make(value)
   }
@@ -42,14 +42,14 @@ class CustomBcryptDriver implements HashDriverContract {
   /**
    * Hash value
    */
-  public async make (value: string) {
+  public async make(value: string) {
     return bcrypt.hash(value, this.config.saltRounds)
   }
 
   /**
    * Verify value
    */
-  public async verify (hashedValue: string, plainValue: string) {
+  public async verify(hashedValue: string, plainValue: string) {
     return bcrypt.compare(plainValue, hashedValue)
   }
 }

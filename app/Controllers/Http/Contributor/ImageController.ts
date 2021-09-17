@@ -4,7 +4,7 @@ import Application from '@ioc:Adonis/Core/Application'
 import sharp from 'sharp'
 
 export default class ImageController {
-  public async store ({ request }: HttpContextContract) {
+  public async store({ request }: HttpContextContract) {
     const image = request.file('image', {
       size: '4mb',
       extnames: ['jpg', 'png', 'jpeg'],

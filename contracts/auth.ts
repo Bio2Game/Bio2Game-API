@@ -35,9 +35,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: LucidProviderContract<typeof User>,
-      config: LucidProviderConfig<typeof User>,
-    },
+      implementation: LucidProviderContract<typeof User>
+      config: LucidProviderConfig<typeof User>
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -52,9 +52,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     guest: {
-      implementation: LucidProviderContract<typeof Guest>,
-      config: LucidProviderConfig<typeof Guest>,
-    },
+      implementation: LucidProviderContract<typeof Guest>
+      config: LucidProviderConfig<typeof Guest>
+    }
   }
 
   /*
@@ -84,9 +84,9 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     user: {
-      implementation: OATGuardContract<'user', 'user'>,
-      config: OATGuardConfig<'user'>,
-    },
+      implementation: OATGuardContract<'user', 'user'>
+      config: OATGuardConfig<'user'>
+    }
     /*
     |--------------------------------------------------------------------------
     | OAT Guard
@@ -97,8 +97,8 @@ declare module '@ioc:Adonis/Addons/Auth' {
     |
     */
     guest: {
-      implementation: OATGuardContract<'guest', 'guest'>,
-      config: OATGuardConfig<'guest'>,
-    },
+      implementation: OATGuardContract<'guest', 'guest'>
+      config: OATGuardConfig<'guest'>
+    }
   }
 }

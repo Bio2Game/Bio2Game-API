@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class Refactos extends BaseSchema {
-  public async up () {
+  public async up() {
     this.schema.table('users', (table) => {
       table.renameColumn('languageCode', 'language_code')
       table.renameColumn('birthDate', 'birth_date')
@@ -56,7 +56,7 @@ export default class Refactos extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.table('users', (table) => {
       table.renameColumn('language_code', 'languageCode')
       table.renameColumn('birth_date', 'birthDate')

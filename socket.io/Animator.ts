@@ -19,7 +19,7 @@ export default class Animator {
   public isOnline: boolean
   public isAnimator: boolean = true
 
-  constructor (socket: Socket, user: PartialUser, game: Game) {
+  constructor(socket: Socket, user: PartialUser, game: Game) {
     this.socket = socket
 
     this.game = game
@@ -33,7 +33,7 @@ export default class Animator {
     this.website = user.website
   }
 
-  public connection () {
+  public connection() {
     this.socket.emit('game', this.game.serialize())
     this.socket.emit('you', this.serialize())
     this.socket.emit('stats', this.game.stats)
@@ -48,9 +48,9 @@ export default class Animator {
       await this.game.stop()
     })
 
-    this.socket.on('banPlayer', origin_player => {
-      const player = this.game.players.find(u => u.id === origin_player.id)
-      if(player) {
+    this.socket.on('banPlayer', (origin_player) => {
+      const player = this.game.players.find((u) => u.id === origin_player.id)
+      if (player) {
         this.game.bannedPlayers.push({
           id: player.id,
           username: player.username,
@@ -77,7 +77,7 @@ export default class Animator {
     })
   }
 
-  public serialize (){
+  public serialize() {
     return {
       id: this.id,
       username: this.username,

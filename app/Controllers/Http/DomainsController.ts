@@ -6,16 +6,16 @@ import Domain from 'App/Models/Domain'
 import lodash from 'lodash'
 
 export default class DomainsController {
-  public async index () {
+  public async index() {
     const domains = await Domain.query().preload('icon').orderBy('updated_at', 'desc')
     return { success: true, domains }
   }
 
-  public async show ({ response, params }: HttpContextContract){
+  public async show({ response, params }: HttpContextContract) {
     try {
       const domain = await Domain.find(params.id)
 
-      if(!domain) {
+      if (!domain) {
         response.status(404).json({ success: false })
       }
 
@@ -32,7 +32,7 @@ export default class DomainsController {
     }
   }
 
-  public async store ({ request, response}: HttpContextContract){
+  public async store({ request, response }: HttpContextContract) {
     try {
       const payload = await request.validate({
         schema: schema.create({
@@ -47,9 +47,11 @@ export default class DomainsController {
 
       let image: string | undefined
 
-      if(payload.image){
-        image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${payload.image.subtype}`
-        await payload.image.move(Application.makePath('files/illustrations'), {name: image})
+      if (payload.image) {
+        image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${
+          payload.image.subtype
+        }`
+        await payload.image.move(Application.makePath('files/illustrations'), { name: image })
       }
 
       const domain = await Domain.create({
@@ -70,18 +72,18 @@ export default class DomainsController {
     }
   }
 
-  public async update ({ request, response, params }: HttpContextContract){
+  public async update({ request, response, params }: HttpContextContract) {
     try {
       const domain = await Domain.find(params.id)
 
-      if(!domain) {
+      if (!domain) {
         response.status(404).json({ success: false })
       }
 
       const payload = await request.validate({
         schema: schema.create({
           label: schema.string({ trim: true }, [
-            rules.unique({ table: 'domains', column: 'label', whereNot: { 'id': params.id } }),
+            rules.unique({ table: 'domains', column: 'label', whereNot: { id: params.id } }),
             rules.maxLength(255),
           ]),
           ...this.validation.schema,
@@ -91,9 +93,11 @@ export default class DomainsController {
 
       let image: string | undefined
 
-      if(payload.image){
-        image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${payload.image.subtype}`
-        await payload.image.move(Application.makePath('files/illustrations'), {name: image})
+      if (payload.image) {
+        image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${
+          payload.image.subtype
+        }`
+        await payload.image.move(Application.makePath('files/illustrations'), { name: image })
       }
 
       domain?.merge({
@@ -116,11 +120,11 @@ export default class DomainsController {
     }
   }
 
-  public async delete ({ response, params }: HttpContextContract){
+  public async delete({ response, params }: HttpContextContract) {
     try {
       const domain = await Domain.find(params.id)
 
-      if(!domain) {
+      if (!domain) {
         response.status(404).json({ success: false })
       }
 
@@ -139,15 +143,11 @@ export default class DomainsController {
     }
   }
 
-  private get validation () {
+  private get validation() {
     return {
       schema: {
-        iconId: schema.number([
-          rules.exists({ table: 'icons', column: 'id' }),
-        ]),
-        keyswords: schema.string({}, [
-          rules.maxLength(255),
-        ]),
+        iconId: schema.number([rules.exists({ table: 'icons', column: 'id' })]),
+        keyswords: schema.string({}, [rules.maxLength(255)]),
         image: schema.file.optional({
           size: '2mb',
           extnames: ['jpg', 'png', 'jpeg'],
@@ -156,12 +156,14 @@ export default class DomainsController {
       messages: {
         'label.required': 'Veuillez indiquer le nom du domaine.',
         'label.unique': 'Ce nom est déjà utilisé par un autre domaine.',
-        'label.maxLength': 'Le nom de votre domaine ne peut pas dépasser {{ maxLength }} caractères.',
-        'iconId.required': 'Veuillez renseigner l\'id de l\'icone.',
-        'iconId.exists': 'Cette icone n\'existe pas.',
-        'keyswords.maxLength': 'Vos mots clés ne peuvent pas dépasser {{ maxLength }} caractères au total.',
+        'label.maxLength':
+          'Le nom de votre domaine ne peut pas dépasser {{ options.maxLength }} caractères.',
+        'iconId.required': "Veuillez renseigner l'id de l'icone.",
+        'iconId.exists': "Cette icone n'existe pas.",
+        'keyswords.maxLength':
+          'Vos mots clés ne peuvent pas dépasser {{ options.maxLength }} caractères au total.',
         'image.file.extname': 'Vous ne pouvez importer que des images',
-        'image.file.size': 'L\'image ne doit pas dépasser 2mo',
+        'image.file.size': "L'image ne doit pas dépasser 2mo",
       },
     }
   }

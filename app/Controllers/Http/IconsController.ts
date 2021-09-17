@@ -6,16 +6,16 @@ import Icon from 'App/Models/Icon'
 import lodash from 'lodash'
 
 export default class IconsController {
-  public async index () {
+  public async index() {
     const icons = await Icon.all()
     return { success: true, icons }
   }
 
-  public async show ({ response, params }: HttpContextContract){
+  public async show({ response, params }: HttpContextContract) {
     try {
       const icon = await Icon.find(params.id)
 
-      if(!icon) {
+      if (!icon) {
         response.status(404).json({ success: false })
       }
 
@@ -32,7 +32,7 @@ export default class IconsController {
     }
   }
 
-  public async store ({ request, response}: HttpContextContract){
+  public async store({ request, response }: HttpContextContract) {
     const validationSchema = schema.create({
       icon: schema.file({
         size: '2mb',
@@ -45,11 +45,13 @@ export default class IconsController {
         schema: validationSchema,
         messages: {
           'icon.file.extname': 'Vous ne pouvez importer que des images',
-          'icon.file.size': 'L\'image ne doit pas dépasser 2mo',
+          'icon.file.size': "L'image ne doit pas dépasser 2mo",
         },
       })
 
-      const iconName = `${lodash.snakeCase(image.fieldName)}.${new Date().getTime()}.${image.subtype}`
+      const iconName = `${lodash.snakeCase(image.fieldName)}.${new Date().getTime()}.${
+        image.subtype
+      }`
       await image.move(Application.makePath('files/icons'), { name: iconName })
       const icon = await Icon.create({ reference: iconName })
 
@@ -67,11 +69,11 @@ export default class IconsController {
     }
   }
 
-  public async delete ({ response, params }: HttpContextContract){
+  public async delete({ response, params }: HttpContextContract) {
     try {
       const icon = await Icon.find(params.id)
 
-      if(!icon) {
+      if (!icon) {
         response.status(404).json({ success: false })
       }
 

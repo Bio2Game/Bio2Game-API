@@ -4,7 +4,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 
 export default class UsersController {
-  public async index () {
+  public async index() {
     const contributors = await User.query()
       .where('status', '>', 0)
       .preload('quizzes', (query) =>
@@ -19,15 +19,15 @@ export default class UsersController {
     return { contributors }
   }
 
-  public async update ({ request, response, auth }: HttpContextContract) {
+  public async update({ request, response, auth }: HttpContextContract) {
     const validationSchema = schema.create({
       username: schema.string.optional({ trim: true }, [
-        rules.unique({ table: 'users', column: 'username', whereNot: { 'id': auth.user?.id } }),
+        rules.unique({ table: 'users', column: 'username', whereNot: { id: auth.user?.id } }),
       ]),
       name: schema.string.optional({ trim: true }),
       email: schema.string.optional({ trim: true }, [
         rules.email(),
-        rules.unique({ table: 'users', column: 'email', whereNot: { 'id': auth.user?.id } }),
+        rules.unique({ table: 'users', column: 'email', whereNot: { id: auth.user?.id } }),
       ]),
       old_password: schema.string.optional({ trim: true }, [
         rules.exists({ table: 'users', column: 'password' }),

@@ -19,7 +19,7 @@ export default class Player {
 
   public isOnline: boolean
 
-  constructor (socket: Socket, user: PartialUser, game: Game) {
+  constructor(socket: Socket, user: PartialUser, game: Game) {
     this.socket = socket
 
     this.game = game
@@ -33,7 +33,7 @@ export default class Player {
     this.responses = []
   }
 
-  public connection () {
+  public connection() {
     this.isOnline = true
 
     this.game.room.emit('player_join', this.serialize())
@@ -48,7 +48,7 @@ export default class Player {
     })
   }
 
-  public onDisconnect () {
+  public onDisconnect() {
     this.isOnline = false
 
     this.game.room.emit('player_leave', this.serialize())
@@ -58,7 +58,7 @@ export default class Player {
     }
   }
 
-  public serialize (responses = false){
+  public serialize(responses = false) {
     return {
       id: this.id,
       username: this.username,
@@ -70,7 +70,7 @@ export default class Player {
     }
   }
 
-  public asResponse () {
+  public asResponse() {
     return {
       id: this.id,
       username: this.username,

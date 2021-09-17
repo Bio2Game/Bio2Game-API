@@ -24,7 +24,7 @@ export default class Guest extends BaseModel {
   public parties: HasMany<typeof Party>
 
   @beforeCreate()
-  public static generateUUID (guest: Guest) {
+  public static generateUUID(guest: Guest) {
     guest.id = uuid.v4()
   }
 }
