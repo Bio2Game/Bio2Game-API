@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-// import Quiz from 'App/Models/Quiz'
+import User from 'App/Models/User'
 import Question from 'App/Models/Question'
 
 export default class QuestionsController {
@@ -28,6 +28,8 @@ export default class QuestionsController {
   public async store({ request, response, auth }: HttpContextContract) {
     const data = request.only(['quizId'])
 
+    const isAdmin = (auth!.user as User).status === 1000
+
     try {
       const payload = await request.validate({
         schema: schema.create({
@@ -43,7 +45,7 @@ export default class QuestionsController {
             rules.exists({
               table: 'quizzes',
               column: 'id',
-              where: { contributor_id: auth?.user?.id },
+              where: !isAdmin ? { contributor_id: auth!.user?.id } : undefined,
             }),
           ]),
           ...this.validation.schema,
@@ -73,6 +75,8 @@ export default class QuestionsController {
   public async update({ request, response, params, auth }: HttpContextContract) {
     const data = request.only(['quizId'])
 
+    const isAdmin = (auth!.user as User).status === 1000
+
     try {
       const question = await Question.find(params.id)
 
@@ -95,7 +99,7 @@ export default class QuestionsController {
             rules.exists({
               table: 'quizzes',
               column: 'id',
-              where: { contributor_id: auth?.user?.id },
+              where: !isAdmin ? { contributor_id: auth!.user?.id } : undefined,
             }),
           ]),
           ...this.validation.schema,
