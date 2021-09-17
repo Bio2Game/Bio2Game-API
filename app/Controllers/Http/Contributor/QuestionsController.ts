@@ -147,7 +147,7 @@ export default class QuestionsController {
     return {
       schema: {
         profil: schema.number(),
-        question: schema.string({}, [rules.maxLength(255)]),
+        question: schema.string(),
         responses: schema.object().members({
           response0: schema.string(),
           response1: schema.string(),
@@ -166,8 +166,6 @@ export default class QuestionsController {
         'label.maxLength':
           'Le titre de votre question ne peut pas dépasser {{ options.maxLength }} caractères.',
         'question.required': 'Veuillez indiquer le contenu de la question.',
-        'question.maxLength':
-          'Le contenu de votre question ne peut pas dépasser {{ options.maxLength }} caractères.',
         'source.maxLength':
           'Le contenu de votre question ne peut pas dépasser {{ options.maxLength }} caractères.',
         'status.required': 'Veuillez indiquer le status de votre question.',
