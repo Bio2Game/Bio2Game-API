@@ -21,5 +21,6 @@ export default Env.rules({
   APP_NAME: Env.schema.string(),
   NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
   CACHE_VIEWS: Env.schema.boolean(),
+  WEB_URL: Env.schema.string(),
   SPARKPOST_API_KEY: Env.schema.string(),
 })

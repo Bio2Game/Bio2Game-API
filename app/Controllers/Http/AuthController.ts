@@ -2,10 +2,10 @@ import User from 'App/Models/User'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import Mail from '@ioc:Adonis/Addons/Mail'
 import Encryption from '@ioc:Adonis/Core/Encryption'
 
 import { string } from '@poppinss/utils/build/helpers'
+import ResetPassword from 'App/Emails/ResetPassword'
 
 export default class AuthController {
   public async user({ auth }: HttpContextContract) {
@@ -151,19 +151,13 @@ export default class AuthController {
       userProvider.setRememberMeToken(string.generateRandom(10))
       await auth.use('user').provider.updateRememberMeToken(userProvider)
 
-      await Mail.send((message) => {
-        message
-          .from('no-reply@bio2game.com')
-          .to(userProvider.user!.email)
-          .subject('Changement de mot de passe sur Bio2Game.com')
-          .htmlView('emails/forget-password', {
-            token: Encryption.encrypt({
-              id: userProvider.user!.id,
-              token: userProvider.getRememberMeToken(),
-            }),
-            domain: process.env.WEB_URL || 'https://www.bio2game.com',
-          })
-      }).catch(() => null)
+      await new ResetPassword(
+        userProvider.user!.email,
+        Encryption.encrypt({
+          id: userProvider.user!.id,
+          token: userProvider.getRememberMeToken(),
+        })
+      ).sendLater()
 
       return response.json({ success: true })
     } catch (error) {

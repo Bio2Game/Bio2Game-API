@@ -7,6 +7,9 @@
     "@adonisjs/mail/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
+  "namespaces": {
+    "mailers": "App/Emails"
+  },
   "aliases": {
     "App": "app",
     "Contracts": "contracts",
