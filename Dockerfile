@@ -8,4 +8,4 @@ RUN npm i \
   && npm ci --production
 
 EXPOSE 6002
-CMD ["node", "server.js"]
+CMD node build/server.js
