@@ -7,15 +7,15 @@ export default class UsersController {
   public async index() {
     const contributors = await User.query()
       .where('status', '>', 0)
+      .whereHas('quizzes', (query) => {
+        query.where('status', 1)
+      })
       .preload('quizzes', (query) =>
         query
           .where('status', 1)
           .preload('domain', (query) => query.preload('icon'))
           .limit(5)
       )
-      .whereHas('quizzes', (query) => {
-        query.where('status', 1)
-      })
     return { contributors }
   }
 
