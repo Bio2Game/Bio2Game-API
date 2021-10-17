@@ -14,7 +14,7 @@ export default class UsersController {
         query
           .where('status', 1)
           .preload('domain', (query) => query.preload('icon'))
-          .limit(5)
+          .groupLimit(5)
       )
     return { contributors }
   }
