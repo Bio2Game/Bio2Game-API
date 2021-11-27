@@ -100,6 +100,7 @@ Route.group(() => {
 
   Route.group(() => {
     Route.patch('/', 'UsersController.update')
+    Route.get('/animators', 'UsersController.animators')
   })
     .prefix('/user')
     .middleware('auth')
