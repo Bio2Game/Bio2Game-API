@@ -41,7 +41,7 @@ export default class UsersSchema extends BaseSchema {
       table.increments()
       table.string('label').notNullable().unique()
       table.integer('iconId')
-      table.string('image').notNullable()
+      table.string('image')
       table.string('keyswords').notNullable()
       table.date('activationDate')
       table.date('endDate')
@@ -197,9 +197,9 @@ export default class UsersSchema extends BaseSchema {
       table.foreign('langueCode')
       table.timestamps()
     })
-    this.schema.createTable('playersAnimators', (table) => {
-      table.integer('playerId').unsigned().notNullable()
-      table.integer('animatorId').unsigned().notNullable()
+    this.schema.createTable('players_animators', (table) => {
+      table.integer('player_id').unsigned().notNullable()
+      table.integer('animator_id').unsigned().notNullable()
       table.timestamps()
     })
     this.schema.createTable('simple_auths', (table) => {

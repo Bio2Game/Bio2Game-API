@@ -95,20 +95,22 @@ export default class User extends BaseModel {
   public parties: HasMany<typeof Party>
 
   @manyToMany(() => User, {
-    pivotTable: 'playersAnimators',
+    pivotTable: 'players_animators',
     localKey: 'id',
-    pivotForeignKey: 'playerId',
-    pivotRelatedForeignKey: 'animatorId',
+    pivotForeignKey: 'player_id',
+    pivotRelatedForeignKey: 'animator_id',
     relatedKey: 'id',
+    pivotTimestamps: true,
   })
   public animators: ManyToMany<typeof User>
 
   @manyToMany(() => User, {
-    pivotTable: 'playersAnimators',
+    pivotTable: 'players_animators',
     localKey: 'id',
-    pivotForeignKey: 'animatorId',
-    pivotRelatedForeignKey: 'playerId',
+    pivotForeignKey: 'animator_id',
+    pivotRelatedForeignKey: 'player_id',
     relatedKey: 'id',
+    pivotTimestamps: true,
   })
   public players: ManyToMany<typeof User>
 }
