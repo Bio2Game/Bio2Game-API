@@ -41,10 +41,12 @@ export default class UsersController {
       contributor_mobile: schema.string.optional({ trim: true }),
       contributor_type: schema.number.optional(),
       status: schema.number.optional(),
+      is_animator: schema.boolean.optional(),
+      animators: schema.array.optional().members(schema.number()),
     })
 
     try {
-      const payload = await request.validate({
+      const { animators, ...payload } = await request.validate({
         schema: validationSchema,
         messages: {
           'username.unique': 'Ce pseudo est déjà utilisé.',
@@ -61,6 +63,8 @@ export default class UsersController {
 
       await user.save()
 
+      if (animators) await user.related('animators').sync(animators)
+
       response.status(200).json({
         success: true,
         message: 'Profil mis à jour avec succès',
@@ -73,6 +77,22 @@ export default class UsersController {
         messages: error.messages,
         error: error,
       })
+    }
+  }
+
+  public async animators({ auth }: HttpContextContract) {
+    const user = auth.user as User
+    await user.load('animators')
+
+    const animators = await User.query().where('isAnimator', 1)
+
+    return {
+      current_animators_ids: user.animators.map((r) => r.id),
+      all_animators: animators.map((animator) => ({
+        id: animator.id,
+        name: animator.name,
+        username: animator.username,
+      })),
     }
   }
 }
