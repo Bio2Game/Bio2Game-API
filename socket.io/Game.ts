@@ -8,9 +8,10 @@ import Animator from './Animator'
 
 import { Question, UserAuthPayload, BannedPlayer, QuestionsResponses } from './types'
 
-import { Namespace, Socket } from 'socket.io'
+import { BroadcastOperator, Socket } from 'socket.io'
 
 import moment from 'moment'
+import { DefaultEventsMap } from 'socket.io/dist/typed-events'
 
 export default class Game {
   public id: string
@@ -26,7 +27,7 @@ export default class Game {
   public stats: QuestionsResponses[] = []
   public finished: Timer
   public manager: GameManager
-  public room: Namespace
+  public room: BroadcastOperator<DefaultEventsMap>
   public pause: boolean
   public party: Party
   public started: boolean
