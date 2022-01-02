@@ -21,6 +21,26 @@ export default Env.rules({
   APP_NAME: Env.schema.string(),
   NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
   CACHE_VIEWS: Env.schema.boolean(),
+
   WEB_URL: Env.schema.string(),
+
+  // Variables for the database
+  DB_CONNECTION: Env.schema.string(),
+  DB_HOST: Env.schema.string(), // no format because "host" format don't accept docker container names
+  DB_USER: Env.schema.string(),
+  DB_PASSWORD: Env.schema.string.optional(),
+  DB_NAME: Env.schema.string(),
+
+  // Variables for social auth
+  GOOGLE_CLIENT_ID: Env.schema.string(),
+  GOOGLE_CLIENT_SECRET: Env.schema.string(),
+  TWITTER_CLIENT_ID: Env.schema.string(),
+  TWITTER_CLIENT_SECRET: Env.schema.string(),
+  FACEBOOK_CLIENT_ID: Env.schema.string(),
+  FACEBOOK_CLIENT_SECRET: Env.schema.string(),
+  LINKEDIN_CLIENT_ID: Env.schema.string(),
+  LINKEDIN_CLIENT_SECRET: Env.schema.string(),
+
+  // Variable for mailer
   SPARKPOST_API_KEY: Env.schema.string(),
 })

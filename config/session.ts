@@ -5,7 +5,6 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
 import { SessionConfig } from '@ioc:Adonis/Addons/Session'
 
 const sessionConfig: SessionConfig = {
@@ -35,7 +34,7 @@ const sessionConfig: SessionConfig = {
   | Note: Switching drivers will make existing sessions invalid.
   |
   */
-  driver: Env.get('SESSION_DRIVER', 'cookie') as string,
+  driver: 'cookie',
 
   /*
   |--------------------------------------------------------------------------
