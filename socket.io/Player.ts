@@ -11,7 +11,7 @@ export default class Player {
   public id: number
   public username: string
   public email: string
-  public avatar_path?: string
+  public avatar?: string
 
   public isGuest: boolean
 
@@ -26,7 +26,7 @@ export default class Player {
 
     this.id = user.id
     this.username = user.username
-    this.avatar_path = user.avatar_path
+    this.avatar = user.avatar
     this.email = user.email
     this.isGuest = !user.email
 
@@ -63,7 +63,7 @@ export default class Player {
       id: this.id,
       username: this.username,
       email: this.email,
-      avatar_path: this.avatar_path,
+      avatar: this.avatar,
       isGuest: this.isGuest,
       isOnline: this.isOnline,
       responses: responses ? this.responses : undefined,

@@ -32,6 +32,7 @@ export default class UserQuizsController {
               .orderBy('id')
           : query.where('status', 1)
       )
+      .preload('author')
       .first()
 
     if (!quiz) {

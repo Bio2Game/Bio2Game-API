@@ -115,7 +115,7 @@ export default class Game {
             id: question.id,
             label: question.label,
             question: question.question,
-            responses: JSON.parse(question.responses),
+            responses: question.responses,
           }
         })
       ),

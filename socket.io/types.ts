@@ -21,7 +21,7 @@ export interface PartialUser {
   username: string
   name?: string
   email: string
-  avatar_path?: string
+  avatar?: string
   website?: string
 }
 
@@ -30,7 +30,7 @@ export interface BannedPlayer {
   username: string
   name?: string
   email: string
-  avatar_path?: string
+  avatar?: string
   ip?: string
 }
 

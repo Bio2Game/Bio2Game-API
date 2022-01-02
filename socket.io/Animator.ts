@@ -12,7 +12,7 @@ export default class Animator {
   public username: string
   public name?: string
   public email: string
-  public avatar_path?: string
+  public avatar?: string
 
   public website?: string
 
@@ -28,7 +28,7 @@ export default class Animator {
     this.username = user.username
     this.name = user.name
     this.email = user.email
-    this.avatar_path = user.avatar_path
+    this.avatar = user.avatar
 
     this.website = user.website
   }
@@ -55,7 +55,7 @@ export default class Animator {
           id: player.id,
           username: player.username,
           email: player.email,
-          avatar_path: player.avatar_path,
+          avatar: player.avatar,
           ip: player.socket.conn.remoteAddress,
         })
         player.socket.emit('gameError', {
@@ -83,7 +83,7 @@ export default class Animator {
       username: this.username,
       email: this.email,
       website: this.website,
-      avatar_path: this.avatar_path,
+      avatar: this.avatar,
       isOnline: this.isOnline,
       animator: true,
     }

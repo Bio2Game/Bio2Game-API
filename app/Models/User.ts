@@ -61,13 +61,13 @@ export default class User extends BaseModel {
   public website: string
 
   @column()
-  public avatar_path: string
+  public avatarPath: string
 
   @column()
   public isAnimator: boolean
 
   @column()
-  public login_source: string
+  public loginSource: string
 
   @column()
   public rememberMeToken?: string
