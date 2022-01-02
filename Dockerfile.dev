@@ -1,12 +1,12 @@
-FROM node:16.6.1
+FROM node:16.13
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install
+RUN yarn install
 
 COPY . .
 
 EXPOSE 6002
 
-CMD npm run dev
+CMD yarn dev
