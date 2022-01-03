@@ -136,11 +136,12 @@ export default class Game {
       this.room.emit('game', this.serialize())
 
       this.stats.push({
-        question_id: question.id,
-        question_desc: question.question,
+        id: question.id,
+        label: question.label,
         right_answers: 0,
         wrong_answers: 0,
         really_wrong_answers: 0,
+        answers: [],
       })
 
       await this.currentQuestion.run()

@@ -62,9 +62,18 @@ export interface UserAuthPayload {
 }
 
 export interface QuestionsResponses {
-  question_id: number
-  question_desc: string
+  id: number
+  label: string
   right_answers: number
   wrong_answers: number
   really_wrong_answers: number
+  answers: QuestionResponse[]
+}
+
+export interface QuestionResponse {
+  user_id: number
+  username: string
+  time: number
+  response: string
+  responseNb: number
 }

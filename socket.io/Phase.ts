@@ -4,12 +4,12 @@ import Player from './Player'
 
 import { Question, PlayerResponsePayload, PlayerResponse } from './types'
 
+const refs = ['right_answers', 'wrong_answers', 'wrong_answers', 'really_wrong_answers']
+
 export default class Phase {
   public question: Question
   public timer: Timer
   private game: Game
-
-  private refs: string[]
 
   public position: Number
 
@@ -17,8 +17,6 @@ export default class Phase {
     this.question = question
     this.game = game
     this.position = this.game.questions.indexOf(question)
-
-    this.refs = ['right_answers', 'wrong_answers', 'wrong_answers', 'really_wrong_answers']
   }
 
   public async run() {
@@ -66,13 +64,14 @@ export default class Phase {
   }
 
   public onReponse(player: Player, data: PlayerResponsePayload) {
+    const time = Number((this.timer.getCurrentTime() / 1000).toFixed(1))
     player.responses.push({
       id: data.id,
       response: data.response,
-      time: this.timer.getCurrentTime(),
+      time,
     })
 
-    this.saveAnswer(data)
+    this.saveAnswer(player, data, time)
 
     if (this.game.pause) {
       return
@@ -88,9 +87,20 @@ export default class Phase {
     }
   }
 
-  private saveAnswer(data: PlayerResponsePayload) {
-    const question = this.game.stats.find(({ question_id }) => question_id === data.id)
-    question![this.refs[data.response.toString()]]++
+  private saveAnswer(player: Player, data: PlayerResponsePayload, time: number) {
+    const question = this.game.stats.find((question) => question.id === data.id)
+    if (!question) return
+
+    const answerType = refs[data.response.toString()]
+
+    question.answers.push({
+      user_id: player.id,
+      username: player.username,
+      response: this.game.currentQuestion.question.responses[`response${data.response}`],
+      responseNb: data.response,
+      time,
+    })
+    question[answerType]++
 
     this.game.animator.socket.emit('stats', this.game.stats)
   }
