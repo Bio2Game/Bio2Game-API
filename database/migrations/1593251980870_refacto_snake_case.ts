@@ -38,10 +38,6 @@ export default class Refactos extends BaseSchema {
       table.renameColumn('contributorId', 'contributor_id')
     })
 
-    this.schema.table('playersAnimators', (table) => {
-      table.renameColumn('playerId', 'player_id')
-    })
-
     this.schema.table('auth_tokens', (table) => {
       table.renameColumn('simpleUserId', 'simple_user_id')
       table.renameColumn('userId', 'user_id')
@@ -92,11 +88,6 @@ export default class Refactos extends BaseSchema {
     this.schema.table('quizzes', (table) => {
       table.renameColumn('domain_id', 'domainId')
       table.renameColumn('contributor_id', 'contributorId')
-    })
-
-    this.schema.table('playersAnimators', (table) => {
-      table.renameColumn('player_id', 'playerId')
-      table.renameColumn('animator_id', 'animatorId')
     })
 
     this.schema.table('auth_tokens', (table) => {

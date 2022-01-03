@@ -249,7 +249,7 @@ export default class UsersSchema extends BaseSchema {
     this.schema.dropTable('languages')
     this.schema.dropTable('country')
     this.schema.dropTable('usersLangues')
-    this.schema.dropTable('playersAnimators')
+    this.schema.dropTable('players_animators')
     this.schema.dropTable('simple_auths')
     this.schema.dropTable('auth_tokens')
     this.schema.dropTable('parties')
