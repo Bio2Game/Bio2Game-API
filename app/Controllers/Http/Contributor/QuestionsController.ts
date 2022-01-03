@@ -53,10 +53,7 @@ export default class QuestionsController {
         messages: this.validation.messages,
       })
 
-      const question = await Question.create({
-        ...payload,
-        responses: JSON.stringify(payload.responses),
-      })
+      const question = await Question.create(payload)
 
       return {
         success: true,
@@ -107,7 +104,7 @@ export default class QuestionsController {
         messages: this.validation.messages,
       })
 
-      question.merge({ ...payload, responses: JSON.stringify(payload.responses) })
+      question.merge(payload)
 
       await question.save()
 
