@@ -34,30 +34,22 @@ export default class DomainsController {
 
   public async store({ request, response }: HttpContextContract) {
     try {
-      const payload = await request.validate({
-        schema: schema.create({
-          label: schema.string({ trim: true }, [
-            rules.unique({ table: 'domains', column: 'label' }),
-            rules.maxLength(255),
-          ]),
-          ...this.validation.schema,
-        }),
-        messages: this.validation.messages,
-      })
+      const payload = await request.validate(this.generateValidation())
 
-      let image: string | undefined
-
+      let imageName: string | undefined
       if (payload.image) {
-        image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${
+        imageName = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${
           payload.image.subtype
         }`
-        await payload.image.move(Application.makePath('files/illustrations'), { name: image })
+        await payload.image.move(Application.makePath('files/illustrations'), { name: imageName })
       }
 
       const domain = await Domain.create({
         ...payload,
-        image,
+        image: imageName,
       })
+
+      await domain.load('icon')
 
       return {
         success: true,
@@ -76,36 +68,28 @@ export default class DomainsController {
     try {
       const domain = await Domain.find(params.id)
 
-      if (!domain) {
-        response.status(404).json({ success: false })
-      }
+      if (!domain) return response.status(404).json({ success: false })
 
-      const payload = await request.validate({
-        schema: schema.create({
-          label: schema.string({ trim: true }, [
-            rules.unique({ table: 'domains', column: 'label', whereNot: { id: params.id } }),
-            rules.maxLength(255),
-          ]),
-          ...this.validation.schema,
-        }),
-        messages: this.validation.messages,
-      })
+      const payload = await request.validate(this.generateValidation(params.id))
 
-      let image: string | undefined
+      let imageName: string | undefined
 
       if (payload.image) {
-        image = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${
+        console.log(payload.image)
+        imageName = `${lodash.snakeCase(payload.label)}.${new Date().getTime()}.${
           payload.image.subtype
         }`
-        await payload.image.move(Application.makePath('files/illustrations'), { name: image })
+        await payload.image.move(Application.makePath('files/illustrations'), { name: imageName })
       }
 
       domain?.merge({
         ...payload,
-        image,
+        image: imageName,
       })
 
       await domain?.save()
+
+      await domain.load('icon')
 
       return {
         success: true,
@@ -143,25 +127,34 @@ export default class DomainsController {
     }
   }
 
-  private get validation() {
+  private generateValidation(domainId = null) {
     return {
-      schema: {
-        iconId: schema.number([rules.exists({ table: 'icons', column: 'id' })]),
+      schema: schema.create({
+        label: schema.string({ trim: true }, [
+          rules.unique({
+            table: 'domains',
+            column: 'label',
+            whereNot: domainId ? { id: domainId } : undefined,
+          }),
+          rules.maxLength(255),
+        ]),
+        icon_id: schema.number([rules.exists({ table: 'icons', column: 'id' })]),
         keyswords: schema.string({}, [rules.maxLength(255)]),
         image: schema.file.optional({
           size: '2mb',
           extnames: ['jpg', 'png', 'jpeg'],
-        }) as any,
-      },
+        }),
+      }),
       messages: {
         'label.required': 'Veuillez indiquer le nom du domaine.',
         'label.unique': 'Ce nom est déjà utilisé par un autre domaine.',
         'label.maxLength':
           'Le nom de votre domaine ne peut pas dépasser {{ options.maxLength }} caractères.',
-        'iconId.required': "Veuillez renseigner l'id de l'icone.",
-        'iconId.exists': "Cette icone n'existe pas.",
+        'icon_id.required': "Veuillez renseigner l'id de l'icone.",
+        'icon_id.exists': "Cette icone n'existe pas.",
         'keyswords.maxLength':
           'Vos mots clés ne peuvent pas dépasser {{ options.maxLength }} caractères au total.',
+        'image.file': 'Veuillez renseigner un fichier',
         'image.file.extname': 'Vous ne pouvez importer que des images',
         'image.file.size': "L'image ne doit pas dépasser 2mo",
       },
