@@ -40,11 +40,12 @@ export default class FormationsController {
     try {
       const formation = await Formation.query()
         .preload('quizzes', (query) => query.preload('domain', (query) => query.preload('icon')))
+        .preload('author')
         .where('id', params.id)
         .first()
 
       if (!formation) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       return {
