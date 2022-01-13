@@ -41,6 +41,12 @@ export default Env.rules({
   LINKEDIN_CLIENT_ID: Env.schema.string(),
   LINKEDIN_CLIENT_SECRET: Env.schema.string(),
 
+  STRIPE_SECRET: Env.schema.string(),
+  STRIPE_ENDPOINT_SECRET: Env.schema.string.optional(),
+
+  DISCORD_TOKEN: Env.schema.string(),
+  DISCORD_ADMIN_ID: Env.schema.string(),
+
   // Variable for mailer
   SPARKPOST_API_KEY: Env.schema.string(),
 })

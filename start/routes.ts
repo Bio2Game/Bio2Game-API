@@ -156,7 +156,8 @@ Route.group(() => {
     Route.post('/upload', 'Contributor/ImageController.store')
   }).middleware(['auth', 'contributor'])
 
-  Route.get('*', async () => {
-    return 'Route introuvable'
-  })
+  Route.post('/payment', 'PaymentsController.create').middleware('auth')
+  Route.post('/webhook', 'PaymentsController.webhook')
+
+  Route.get('*', () => 'Route introuvable')
 }).prefix('/api')

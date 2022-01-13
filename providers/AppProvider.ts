@@ -24,6 +24,7 @@ export default class AppProvider {
      */
     if (App.default.environment === 'web') {
       await import('../start/socket')
+      await import('../start/bot')
     }
   }
 }
