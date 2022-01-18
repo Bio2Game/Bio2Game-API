@@ -27,6 +27,7 @@ interface SessionCreationData {
   iframe?: boolean
   costs: number
   donations: number
+  features: number
 }
 
 export default class PaymentsController {
@@ -50,12 +51,25 @@ export default class PaymentsController {
           [40, 150, 500, 1000],
           [rules.requiredWhen('reason', '=', 'formation')]
         ),
-        results: schema.boolean.optional([rules.requiredWhen('reason', '!=', null)]),
-        iframe: schema.boolean.optional([rules.requiredWhen('reason', '!=', null)]),
+        results: schema.boolean.optional(),
+        iframe: schema.boolean.optional(),
 
         costs: schema.number(),
         donations: schema.number(),
+        features: schema.number(),
       }),
+      messages: {
+        'identity.required': 'Veuillez indiquer notre nom et prénom.',
+        'email.required': 'Veuillez indiquer votre adresse email.',
+        'email.email': 'Veuillez indiquer une adresse email valide.',
+        'reason.enum': 'Veuillez indiquer une raison valide.',
+        'name.requiredWhen': 'Veuillez indiquer un nom.',
+        'startDate.requiredWhen': 'Veuillez indiquer une date de lancement.',
+        'duration.requiredWhen': 'Veuillez indiquer une durée.',
+        'duration.enum': 'Veuillez indiquer une durée valide.',
+        'students.requiredWhen': "Veuillez indiquer un nombre d'édudiants.",
+        'students.enum': "Veuillez indiquer un nombre d'édudiants valide.",
+      },
     })
 
     const product = this.generateProduct(payload, auth.user)
@@ -189,6 +203,19 @@ export default class PaymentsController {
           unit_amount: data.costs * 100,
           product_data: {
             name: 'Coûts de fonctionnement',
+          },
+        },
+      })
+    }
+
+    if (data.features) {
+      items.push({
+        quantity: 1,
+        price_data: {
+          currency: 'EUR',
+          unit_amount: data.features * 100,
+          product_data: {
+            name: 'Fonctionnalités',
           },
         },
       })
