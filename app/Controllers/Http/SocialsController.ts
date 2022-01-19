@@ -39,6 +39,8 @@ export default class SocialsController {
       }
     )
 
+    await user.load('donations')
+
     const { token } = await auth.use('user').generate(user)
 
     return response.ok({ user, token })
@@ -75,6 +77,8 @@ export default class SocialsController {
       }
     )
 
+    await user.load('donations')
+
     const { token } = await auth.use('user').generate(user)
 
     return response.ok({ user, token })
@@ -110,6 +114,8 @@ export default class SocialsController {
       }
     )
 
+    await user.load('donations')
+
     const { token } = await auth.use('user').generate(user)
 
     return response.ok({ user, token })
@@ -144,6 +150,8 @@ export default class SocialsController {
         loginSource: SocialAccounts.FACEBOOK,
       }
     )
+
+    await user.load('donations')
 
     const { token } = await auth.use('user').generate(user)
 
