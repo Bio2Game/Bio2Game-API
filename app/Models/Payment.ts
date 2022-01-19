@@ -3,7 +3,7 @@ import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 
 import User from 'App/Models/User'
 
-export default class Question extends BaseModel {
+export default class Payment extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
