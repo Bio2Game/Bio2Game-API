@@ -8,6 +8,7 @@ import Env from '@ioc:Adonis/Core/Env'
 
 import Stripe from 'stripe'
 import Bot from 'App/Services/Bot'
+import Payment from 'App/Models/Payment'
 import { MessageEmbedOptions } from 'discord.js'
 import { stripIndents } from 'common-tags'
 
@@ -27,7 +28,6 @@ interface SessionCreationData {
   iframe?: boolean
   costs: number
   donations: number
-  features: number
 }
 
 export default class PaymentsController {
@@ -56,7 +56,6 @@ export default class PaymentsController {
 
         costs: schema.number(),
         donations: schema.number(),
-        features: schema.number(),
       }),
       messages: {
         'identity.required': 'Veuillez indiquer notre nom et prénom.',
@@ -130,6 +129,21 @@ export default class PaymentsController {
     if (!adminContact) return
 
     const data = session.metadata ?? {}
+
+    await Payment.create({
+      userId: data.user_id ? Number(data.user_id) : undefined,
+      identity: data.identity,
+      email: data.email,
+      reason: data.reason,
+      name: data.name,
+      startDate: DateTime.fromFormat(data.startDate, 'yyyy-MM-dd'),
+      duration: data.duration,
+      students: Number(data.students),
+      results: Boolean(data.results),
+      iframe: Boolean(data.iframe),
+      costs: Number(data.costs),
+      donations: Number(data.donations),
+    })
 
     const embed = {
       title: 'Un nouveau paiement a été effectué sur Bio2Game !',
@@ -208,19 +222,6 @@ export default class PaymentsController {
       })
     }
 
-    if (data.features) {
-      items.push({
-        quantity: 1,
-        price_data: {
-          currency: 'EUR',
-          unit_amount: data.features * 100,
-          product_data: {
-            name: 'Fonctionnalités',
-          },
-        },
-      })
-    }
-
     if (data.donations) {
       items.push({
         quantity: 1,
@@ -237,7 +238,6 @@ export default class PaymentsController {
     return {
       payment_method_types: ['card', 'bancontact'],
       line_items: items,
-      allow_promotion_codes: true,
       metadata: {
         ...data,
         user_id: user?.id.toString() ?? '',
@@ -247,7 +247,7 @@ export default class PaymentsController {
       },
       customer_email: (user as User)?.email ?? data.email!,
       mode: 'payment',
-      success_url: `${Env.get('WEB_URL')}/donation/success`,
+      success_url: `${Env.get('WEB_URL')}?donation=success`,
       cancel_url: Env.get('WEB_URL'),
     }
   }

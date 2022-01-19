@@ -13,6 +13,7 @@ import {
 import Quiz from 'App/Models/Quiz'
 import Comment from 'App/Models/Comment'
 import Party from 'App/Models/Party'
+import Payment from 'App/Models/Payment'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -113,4 +114,7 @@ export default class User extends BaseModel {
     pivotTimestamps: true,
   })
   public players: ManyToMany<typeof User>
+
+  @hasMany(() => Payment)
+  public donations: HasMany<typeof Payment>
 }
