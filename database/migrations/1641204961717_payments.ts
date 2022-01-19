@@ -4,7 +4,7 @@ export default class Socials extends BaseSchema {
   protected tableName = 'payments'
 
   public async up() {
-    this.schema.table(this.tableName, (table) => {
+    this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.integer('user_id').notNullable()
       table.string('identity')
