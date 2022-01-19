@@ -17,7 +17,7 @@ export default class Socials extends BaseSchema {
       table.boolean('results')
       table.boolean('iframe')
       table.integer('costs')
-      table.boolean('donations')
+      table.integer('donations')
       table.timestamp('created_at')
     })
   }

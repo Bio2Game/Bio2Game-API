@@ -94,7 +94,7 @@ export default class PaymentsController {
 
         if (!signature) throw new Error('Missing signature')
 
-        event = stripe.webhooks.constructEvent(request.toJSON(), signature, endpointSecret)
+        event = stripe.webhooks.constructEvent(request.raw()!, signature, endpointSecret)
       } catch (error) {
         console.error(error)
         return response.badRequest(`Webhook Error: ${error.message}`)
@@ -136,11 +136,11 @@ export default class PaymentsController {
       email: data.email,
       reason: data.reason,
       name: data.name,
-      startDate: DateTime.fromFormat(data.startDate, 'yyyy-MM-dd'),
+      startDate: data.startDate ? DateTime.fromFormat(data.startDate, 'yyyy-MM-dd') : null,
       duration: data.duration,
       students: Number(data.students),
-      results: Boolean(data.results),
-      iframe: Boolean(data.iframe),
+      results: data.results === 'true',
+      iframe: data.iframe === 'true',
       costs: Number(data.costs),
       donations: Number(data.donations),
     })
@@ -155,13 +155,13 @@ export default class PaymentsController {
           inline: true,
         },
         {
-          name: 'Id du compte',
-          value: session.metadata?.user_id ?? 'Inconnu',
+          name: data.user_id ? 'ID du compte' : 'Identité',
+          value: data.user_id || data.identity,
           inline: true,
         },
         {
           name: 'Montant',
-          value: `${session.amount_total}€`,
+          value: `${session.amount_total! / 100}€`,
           inline: true,
         },
         data.reason
@@ -179,9 +179,8 @@ export default class PaymentsController {
                             { locale: 'fr' }
                           )
                         : 'Non défini'
-                    }
-                    Durée: **${data.students ?? 'Non défini'}**
-                    Etudiants: **${data.students ?? 'Non défini'}**
+                    }**
+                    Durée: **${this.parseDuration(data.duration) ?? 'Non défini'}**
                   `
                   : stripIndents`
                     Motif: **Formation**
@@ -193,14 +192,18 @@ export default class PaymentsController {
         {
           name: 'Options',
           value: stripIndents`
-            Widget: ${data.iframe ? '✅' : '❌'}
-            Résultats: ${data.results ? '✅' : '❌'}
+            Widget: ${data.iframe === 'true' ? '✅' : '❌'}
+            Résultats: ${data.results === 'true' ? '✅' : '❌'}
           `,
         },
       ],
     } as MessageEmbedOptions
 
-    await adminContact.send({ embeds: [embed] }).catch(() => null)
+    try {
+      await adminContact.send({ embeds: [embed] })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   private generateProduct(
@@ -249,6 +252,19 @@ export default class PaymentsController {
       mode: 'payment',
       success_url: `${Env.get('WEB_URL')}?donation=success`,
       cancel_url: Env.get('WEB_URL'),
+    }
+  }
+
+  private parseDuration(value: string): string {
+    switch (value) {
+      case 'day':
+        return 'Une journée'
+      case 'week':
+        return 'Une semaine'
+      case 'month':
+        return 'Un mois'
+      default:
+        return value
     }
   }
 }
