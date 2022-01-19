@@ -10,6 +10,8 @@ import ResetPassword from 'App/Emails/ResetPassword'
 export default class AuthController {
   public async user({ auth }: HttpContextContract) {
     const user = await auth.use('user').authenticate()
+    await user.load('donations')
+
     return user ? user.toJSON() : false
   }
 
