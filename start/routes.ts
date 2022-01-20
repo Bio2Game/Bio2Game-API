@@ -54,7 +54,6 @@ Route.group(() => {
 
     Route.group(() => {
       Route.get('/google', 'SocialsController.googleRedirection')
-      Route.get('/twitter', 'SocialsController.twitterRedirection')
       Route.get('/linkedin', 'SocialsController.linkedinRedirection')
       Route.get('/facebook', 'SocialsController.facebookRedirection')
     }).prefix('/social')
@@ -147,7 +146,6 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/google', 'SocialsController.googleCallback')
-    Route.get('/twitter', 'SocialsController.twitterCallback')
     Route.get('/linkedin', 'SocialsController.linkedinCallback')
     Route.get('/facebook', 'SocialsController.facebookCallback')
   }).prefix('/login/callback')

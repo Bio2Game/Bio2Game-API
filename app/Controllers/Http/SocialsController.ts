@@ -3,7 +3,6 @@ import User from 'App/Models/User'
 
 enum SocialAccounts {
   GOOGLE = 'google',
-  TWITTER = 'twitter',
   LINKEDIN = 'linkedin',
   FACEBOOK = 'facebook',
 }
@@ -14,7 +13,7 @@ export default class SocialsController {
    */
 
   public async googleRedirection({ ally }: HttpContextContract) {
-    return ally.use('google').redirectUrl()
+    return ally.use('google').redirect()
   }
 
   public async googleCallback({ auth, response, ally }: HttpContextContract) {
@@ -36,44 +35,6 @@ export default class SocialsController {
         avatarPath: avatarUrl ?? undefined,
         username: nickName,
         loginSource: SocialAccounts.GOOGLE,
-      }
-    )
-
-    await user.load('donations')
-
-    const { token } = await auth.use('user').generate(user)
-
-    return response.ok({ user, token })
-  }
-
-  /**
-   * Twitter authentification
-   */
-
-  public async twitterRedirection({ ally }: HttpContextContract) {
-    return ally.use('twitter').redirectUrl()
-  }
-
-  public async twitterCallback({ auth, response, ally }: HttpContextContract) {
-    const twitter = ally.use('twitter')
-
-    if (twitter.accessDenied()) return response.unauthorized()
-
-    if (twitter.stateMisMatch()) return response.requestTimeout()
-
-    if (twitter.hasError()) return response.badRequest(twitter.getError())
-
-    const twitterUser = await twitter.user()
-
-    console.log(twitterUser)
-
-    const user = await User.updateOrCreate(
-      {
-        email: twitterUser.email!,
-      },
-      {
-        username: twitterUser.name,
-        loginSource: SocialAccounts.TWITTER,
       }
     )
 
