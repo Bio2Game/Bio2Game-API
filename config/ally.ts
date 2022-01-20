@@ -30,17 +30,6 @@ const allyConfig: AllyConfig = {
     callbackUrl: `${Env.get('WEB_URL')}/login/callback/google`,
   },
   /*
-	|--------------------------------------------------------------------------
-	| Twitter driver
-	|--------------------------------------------------------------------------
-	*/
-  twitter: {
-    driver: 'twitter',
-    clientId: Env.get('TWITTER_CLIENT_ID'),
-    clientSecret: Env.get('TWITTER_CLIENT_SECRET'),
-    callbackUrl: `${Env.get('WEB_URL')}/login/callback/twitter`,
-  },
-  /*
   |--------------------------------------------------------------------------
   | LinkedIn driver
   |--------------------------------------------------------------------------
