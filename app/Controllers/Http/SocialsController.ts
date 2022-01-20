@@ -13,7 +13,7 @@ export default class SocialsController {
    */
 
   public async googleRedirection({ ally }: HttpContextContract) {
-    return ally.use('google').redirect()
+    return ally.use('google').redirectUrl()
   }
 
   public async googleCallback({ auth, response, ally }: HttpContextContract) {
