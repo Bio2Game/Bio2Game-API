@@ -34,8 +34,6 @@ export default Env.rules({
   // Variables for social auth
   GOOGLE_CLIENT_ID: Env.schema.string(),
   GOOGLE_CLIENT_SECRET: Env.schema.string(),
-  TWITTER_CLIENT_ID: Env.schema.string(),
-  TWITTER_CLIENT_SECRET: Env.schema.string(),
   FACEBOOK_CLIENT_ID: Env.schema.string(),
   FACEBOOK_CLIENT_SECRET: Env.schema.string(),
   LINKEDIN_CLIENT_ID: Env.schema.string(),
