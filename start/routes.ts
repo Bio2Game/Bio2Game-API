@@ -106,6 +106,7 @@ Route.group(() => {
 
   Route.group(() => {
     Route.patch('/', 'UsersController.update')
+    Route.post('/avatar', 'UsersController.uploadAvatar')
     Route.get('/animators', 'UsersController.animators')
   })
     .prefix('/user')

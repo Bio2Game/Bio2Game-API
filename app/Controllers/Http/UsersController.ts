@@ -2,6 +2,8 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import User from 'App/Models/User'
+import sharp from 'sharp'
+import Application from '@ioc:Adonis/Core/Application'
 
 export default class UsersController {
   public async index() {
@@ -78,6 +80,36 @@ export default class UsersController {
         error: error,
       })
     }
+  }
+
+  public async uploadAvatar({ request, auth }: HttpContextContract) {
+    const image = request.file('avatar', {
+      size: '4mb',
+      extnames: ['jpg', 'png', 'jpeg'],
+    })
+
+    if (!image) {
+      return 'Please upload file'
+    }
+
+    if (image.hasErrors) {
+      return image.errors
+    }
+
+    const name = new Date().getTime() + '.' + (image.extname || 'png')
+
+    sharp(image.tmpPath)
+      .resize({ width: 1024, withoutEnlargement: true })
+      .resize({ height: 1024, withoutEnlargement: true })
+      .rotate() // necessary to rotate back to what it should be (from exif)
+      .toFile(`${Application.makePath('files/avatar_uploads')}/${name}`)
+      .catch(console.error)
+
+    const user = auth.user as User
+    user.avatarPath = name
+    await user.save()
+
+    return name
   }
 
   public async animators({ auth }: HttpContextContract) {
