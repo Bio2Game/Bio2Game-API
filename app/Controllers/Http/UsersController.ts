@@ -99,8 +99,8 @@ export default class UsersController {
     const name = new Date().getTime() + '.' + (image.extname || 'png')
 
     sharp(image.tmpPath)
-      .resize({ width: 1024, withoutEnlargement: true })
-      .resize({ height: 1024, withoutEnlargement: true })
+      .resize({ width: 256, withoutEnlargement: true })
+      .resize({ height: 256, withoutEnlargement: true })
       .rotate() // necessary to rotate back to what it should be (from exif)
       .toFile(`${Application.makePath('files/avatar_uploads')}/${name}`)
       .catch(console.error)
