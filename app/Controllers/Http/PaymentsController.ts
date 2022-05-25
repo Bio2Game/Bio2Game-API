@@ -145,6 +145,10 @@ export default class PaymentsController {
       donations: Number(data.donations),
     })
 
+    const startDate = data.startDate
+      ? DateTime.fromFormat(data.startDate, 'yyyy-MM-dd').toFormat('dd LLLL yyyy', { locale: 'fr' })
+      : 'Non défini'
+
     const embed = {
       title: 'Un nouveau paiement a été effectué sur Bio2Game !',
       color: 0x9dcd09,
@@ -172,14 +176,7 @@ export default class PaymentsController {
                   ? stripIndents`
                     Motif: **Évènement**
                     Nom de l'évènement: **${data.name}**
-                    Date de début: **${
-                      data.startDate
-                        ? DateTime.fromFormat(data.startDate, 'yyyy-MM-dd').toFormat(
-                            'dd LLLL yyyy',
-                            { locale: 'fr' }
-                          )
-                        : 'Non défini'
-                    }**
+                    Date de début: **${startDate}**
                     Durée: **${this.parseDuration(data.duration) ?? 'Non défini'}**
                   `
                   : stripIndents`
