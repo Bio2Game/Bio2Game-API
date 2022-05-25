@@ -4,18 +4,19 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import sharp from 'sharp'
 import Application from '@ioc:Adonis/Core/Application'
+import { QuizStatus } from 'App/Models/Quiz'
 
 export default class UsersController {
   public async index() {
     const contributors = await User.query()
       .where('status', '>', 0)
       .whereHas('quizzes', (query) => {
-        query.where('status', 1)
+        query.where('status', QuizStatus.Public)
       })
       .preload('quizzes', (query) =>
         query
-          .where('status', 1)
-          .preload('domain', (query) => query.preload('icon'))
+          .where('status', QuizStatus.Public)
+          .preload('domain', (query2) => query2.preload('icon'))
           .groupLimit(5)
       )
     return { contributors }

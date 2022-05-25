@@ -12,6 +12,12 @@ import Domain from 'App/Models/Domain'
 import User from 'App/Models/User'
 import Quiz from 'App/Models/Quiz'
 
+export enum FormationStatus {
+  Dev,
+  Public,
+  Private,
+}
+
 export default class Formation extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -35,7 +41,7 @@ export default class Formation extends BaseModel {
   public level: number
 
   @column()
-  public status: number
+  public status: FormationStatus
 
   @column()
   public duration: number

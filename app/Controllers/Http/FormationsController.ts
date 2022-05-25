@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import Formation from 'App/Models/Formation'
+import Formation, { FormationStatus } from 'App/Models/Formation'
 import User from 'App/Models/User'
 
 export default class FormationsController {
@@ -9,7 +9,7 @@ export default class FormationsController {
       .preload('author')
       .preload('quizzes')
       .preload('domain')
-      .where('status', 1)
+      .where('status', FormationStatus.Public)
       .orderBy('updated_at', 'desc')
     return { formations }
   }
@@ -19,7 +19,7 @@ export default class FormationsController {
       return { formations: [] }
     }
     let formations: Formation[]
-    if (auth.user instanceof User && auth.user!.status > 999) {
+    if (auth.user instanceof User && auth.user.status > 999) {
       formations = await Formation.query()
         .preload('author')
         .preload('quizzes')
@@ -39,7 +39,7 @@ export default class FormationsController {
   public async show({ response, params }: HttpContextContract) {
     try {
       const formation = await Formation.query()
-        .preload('quizzes', (query) => query.preload('domain', (query) => query.preload('icon')))
+        .preload('quizzes', (query) => query.preload('domain', (query2) => query2.preload('icon')))
         .preload('author')
         .where('id', params.id)
         .first()

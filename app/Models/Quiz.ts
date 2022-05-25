@@ -5,6 +5,12 @@ import Question from 'App/Models/Question'
 import Domain from 'App/Models/Domain'
 import User from 'App/Models/User'
 
+export enum QuizStatus {
+  Dev,
+  Private,
+  Public,
+}
+
 export default class Quiz extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -25,7 +31,7 @@ export default class Quiz extends BaseModel {
   public domainId: number
 
   @column()
-  public status: number
+  public status: QuizStatus
 
   @column()
   public contributorId: number

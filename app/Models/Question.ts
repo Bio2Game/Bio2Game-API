@@ -4,6 +4,11 @@ import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Quiz from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
 
+export enum QuestionStatus {
+  Private,
+  Public,
+}
+
 export default class Question extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -27,7 +32,7 @@ export default class Question extends BaseModel {
   public source: string
 
   @column()
-  public status: number
+  public status: QuestionStatus
 
   @column()
   public time: number

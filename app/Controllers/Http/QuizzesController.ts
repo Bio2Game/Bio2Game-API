@@ -1,10 +1,16 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import Quiz from 'App/Models/Quiz'
+import Quiz, { QuizStatus } from 'App/Models/Quiz'
 
 enum Languages {
   FR = 'fr',
   EN = 'en',
+  JP = 'jp',
+  AR = 'ar',
+  DE = 'de',
+  ES = 'es',
+  IT = 'it',
+  MAR = 'mar',
 }
 
 export default class QuizzesController {
@@ -12,9 +18,11 @@ export default class QuizzesController {
     const quizzes = await Quiz.query()
       .preload('author')
       .preload('domain', (query) => query.preload('icon'))
-      .whereHas('questions', (query) => query.where('status', 1))
-      .where('status', 1)
+      .whereHas('questions', (query) => query.where('status', QuizStatus.Public))
+      .where('status', QuizStatus.Public)
       .orderBy('updated_at', 'desc')
+
+    console.log(quizzes[0].status)
     return { quizzes }
   }
 
@@ -22,9 +30,9 @@ export default class QuizzesController {
     const quizzes = await Quiz.query()
       .preload('author')
       .preload('domain', (query) => query.preload('icon'))
-      .whereHas('questions', (query) => query.where('status', 1))
+      .whereHas('questions', (query) => query.where('status', QuizStatus.Public))
       .preload('questions')
-      .where('status', 1)
+      .where('status', QuizStatus.Public)
       .orderBy('updated_at', 'desc')
     return { quizzes }
   }
@@ -171,6 +179,7 @@ export default class QuizzesController {
         'domainId.required': "Veuillez renseigner l'id du domaine associé.",
         'domainId.exists': "Ce domaine n'existe pas.",
         'level.required': 'Veuillez renseigner le niveau du public.',
+        'language.required': 'Veuillez renseigner la langue du quiz.',
         'localisation.maxLength':
           'Votre localisation ne peux pas dépasser {{ options.maxLength }} caractères.',
       },

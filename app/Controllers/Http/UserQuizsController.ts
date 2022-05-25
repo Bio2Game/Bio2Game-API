@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { QuestionStatus } from 'App/Models/Question'
 
 import Quiz from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
@@ -25,12 +26,12 @@ export default class UserQuizsController {
       .preload('questions', (query) =>
         params.type === 'quiz'
           ? query
-              .where('status', 1)
-              .preload('user_response', (query) =>
-                query.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
+              .where('status', QuestionStatus.Public)
+              .preload('user_response', (query2) =>
+                query2.where(`${authMethod}Id`, auth.use(authMethod).user!.id)
               )
               .orderBy('id')
-          : query.where('status', 1)
+          : query.where('status', QuestionStatus.Public)
       )
       .preload('author')
       .first()
