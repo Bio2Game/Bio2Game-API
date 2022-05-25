@@ -18,8 +18,6 @@ export default class UsersSchema extends BaseSchema {
       table.dropColumns('activationDate', 'endDate', 'uniqName')
     })
 
-    this.schema.dropTable('usersDomains')
-
     this.schema.table('questions', (table) => {
       table.dropColumns(
         'nbOfPoint',
@@ -33,29 +31,11 @@ export default class UsersSchema extends BaseSchema {
       )
     })
 
-    this.schema.dropTable('nature')
-
-    this.schema.dropTable('status')
-
     this.schema.table('comments', (table) => {
       table.renameColumn('comment', 'content')
       table.renameColumn('responsId', 'parentId')
       table.dropColumn('uniqName')
     })
-
-    this.schema.dropTable('userGeolocalizationLogs')
-
-    this.schema.dropTable('questiongeolocalizations')
-
-    this.schema.dropTable('geolocalizationsList')
-
-    this.schema.dropTable('geolocalisationType')
-
-    this.schema.dropTable('languages')
-
-    this.schema.dropTable('country')
-
-    this.schema.dropTable('usersLangues')
   }
 
   public async down() {
@@ -85,20 +65,6 @@ export default class UsersSchema extends BaseSchema {
       table.date('endDate').defaultTo(null)
     })
 
-    this.schema.createTable('nature', (table) => {
-      table.increments()
-      table.integer('code').unsigned().notNullable()
-      table.string('label').notNullable()
-      table.timestamps()
-    })
-
-    this.schema.createTable('status', (table) => {
-      table.increments()
-      table.integer('code').unsigned().notNullable()
-      table.string('label').notNullable()
-      table.timestamps()
-    })
-
     this.schema.table('comments', (table) => {
       table.renameColumn('content', 'comment')
       table.renameColumn('parentId', 'responsId')
@@ -106,77 +72,6 @@ export default class UsersSchema extends BaseSchema {
       table.foreign('userId')
       table.foreign('responsId')
       table.foreign('questionId')
-    })
-
-    this.schema.createTable('userGeolocalizationLogs', (table) => {
-      table.increments()
-      table.integer('userId').unsigned().notNullable()
-      table.date('endDate').defaultTo(null)
-      table.integer('geolocalizationType')
-      table.string('Lat')
-      table.string('Lng')
-      table.string('manualGeolocalizationId')
-      table.foreign('userId')
-      table.foreign('manualGeolocalizationId')
-      table.foreign('geolocalizationType')
-      table.timestamps()
-    })
-
-    this.schema.createTable('questiongeolocalizations', (table) => {
-      table.increments()
-      table.integer('questionId').unsigned().notNullable()
-      table.date('endDate').defaultTo(null)
-      table.integer('geolocalizationType')
-      table.string('Lat')
-      table.string('Lng')
-      table.string('manualGeolocalizationId')
-      table.foreign('manualGeolocalizationId')
-      table.foreign('geolocalizationType')
-      table.foreign('questionId')
-      table.timestamps()
-    })
-
-    this.schema.createTable('geolocalizationsList', (table) => {
-      table.increments()
-      table.date('endDate').defaultTo(null)
-      table.string('label')
-      table.string('Lat')
-      table.string('Lng')
-      table.integer('radius')
-      table.integer('level1').defaultTo(null)
-      table.integer('level2').defaultTo(null)
-      table.integer('level3').defaultTo(null)
-      table.integer('level4').defaultTo(null)
-      table.string('uniqName').unique()
-      table.timestamps()
-    })
-
-    this.schema.createTable('geolocalisationType', (table) => {
-      table.increments()
-      table.integer('code', 3).unsigned().notNullable()
-      table.integer('label').notNullable()
-      table.timestamps()
-    })
-
-    this.schema.createTable('languages', (table) => {
-      table.increments()
-      table.integer('code', 3).unsigned().notNullable()
-      table.string('label').notNullable()
-      table.timestamps()
-    })
-    this.schema.createTable('country', (table) => {
-      table.increments()
-      table.integer('code', 3).unsigned().notNullable()
-      table.string('label').notNullable()
-      table.timestamps()
-    })
-    this.schema.createTable('usersLangues', (table) => {
-      table.increments()
-      table.integer('userId').unsigned().notNullable()
-      table.string('langueCode', 3).notNullable()
-      table.foreign('userId')
-      table.foreign('langueCode')
-      table.timestamps()
     })
   }
 }
