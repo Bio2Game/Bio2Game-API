@@ -22,7 +22,6 @@ export default class QuizzesController {
       .where('status', QuizStatus.Public)
       .orderBy('updated_at', 'desc')
 
-    console.log(quizzes[0].status)
     return { quizzes }
   }
 
