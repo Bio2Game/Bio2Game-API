@@ -135,7 +135,7 @@ Route.group(() => {
     }).prefix('/questions')
 
     Route.group(() => {
-      Route.get('/', 'Contributor/FormationsController.list')
+      Route.get('/', 'Contributor/FormationsController.index')
       Route.get('/:id', 'Contributor/FormationsController.show')
       Route.post('/', 'Contributor/FormationsController.store')
       Route.patch('/:id', 'Contributor/FormationsController.update')

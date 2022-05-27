@@ -4,7 +4,7 @@ import Formation from 'App/Models/Formation'
 import User from 'App/Models/User'
 
 export default class FormationsController {
-  public async list({ auth }: HttpContextContract) {
+  public async index({ auth }: HttpContextContract) {
     if (!auth.user) {
       return { formations: [] }
     }
