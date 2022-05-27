@@ -60,11 +60,7 @@ export default class Game {
       return this.animator.connection()
     }
 
-    if (
-      this.bannedPlayers.some(
-        (player) => player.id === user.id || player.ip === socket.conn.remoteAddress
-      )
-    ) {
+    if (this.bannedPlayers.some((p) => p.id === user.id || p.ip === socket.conn.remoteAddress)) {
       socket.emit('gameError', {
         error: 403,
         message: 'Vous avez été banni de cette partie.',
@@ -72,7 +68,7 @@ export default class Game {
       return socket.disconnect()
     }
 
-    const playerExists = this.players.find((player) => player.id === user.id)
+    const playerExists = this.players.find((p) => p.id === user.id)
 
     if (playerExists) {
       playerExists.socket.disconnect()
@@ -87,7 +83,7 @@ export default class Game {
       return socket.disconnect()
     }
 
-    if (this.players.some((player) => player.id === user.id)) {
+    if (this.players.some((p) => p.id === user.id)) {
       return socket.disconnect()
     }
 
@@ -193,7 +189,9 @@ export default class Game {
 
   public async stop() {
     const users = [...this.players, this.animator]
-    await Promise.all(users.map(async (user) => await user.socket.disconnect()))
+    for (const user of users) {
+      user.socket.disconnect()
+    }
     this.manager.deleteGame(this.id)
   }
 

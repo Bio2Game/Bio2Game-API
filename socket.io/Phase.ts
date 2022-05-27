@@ -11,7 +11,7 @@ export default class Phase {
   public timer: Timer
   private game: Game
 
-  public position: Number
+  public position: number
 
   constructor(question: Question, game: Game) {
     this.question = question
@@ -88,7 +88,7 @@ export default class Phase {
   }
 
   private saveAnswer(player: Player, data: PlayerResponsePayload, time: number) {
-    const question = this.game.stats.find((question) => question.id === data.id)
+    const question = this.game.stats.find((q) => q.id === data.id)
     if (!question) return
 
     const answerType = refs[data.response.toString()]
