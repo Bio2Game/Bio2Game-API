@@ -9,7 +9,7 @@ export default class QuestionsController {
       const question = await Question.find(params.id)
 
       if (!question) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       return {
@@ -17,7 +17,7 @@ export default class QuestionsController {
         question,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -26,9 +26,11 @@ export default class QuestionsController {
   }
 
   public async store({ request, response, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     const data = request.only(['quizId'])
 
-    const isAdmin = (auth!.user as User).status === 1000
+    const isAdmin = user.status === 1000
 
     try {
       const payload = await request.validate({
@@ -45,7 +47,7 @@ export default class QuestionsController {
             rules.exists({
               table: 'quizzes',
               column: 'id',
-              where: !isAdmin ? { contributor_id: auth!.user?.id } : undefined,
+              where: !isAdmin ? { contributor_id: user.id } : undefined,
             }),
           ]),
           ...this.validation.schema,
@@ -61,7 +63,7 @@ export default class QuestionsController {
       }
     } catch (error) {
       console.log(error)
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -70,9 +72,11 @@ export default class QuestionsController {
   }
 
   public async update({ request, response, params, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     const data = request.only(['quizId'])
 
-    const isAdmin = (auth!.user as User).status === 1000
+    const isAdmin = user.status === 1000
 
     try {
       const question = await Question.find(params.id)
@@ -96,7 +100,7 @@ export default class QuestionsController {
             rules.exists({
               table: 'quizzes',
               column: 'id',
-              where: !isAdmin ? { contributor_id: auth!.user?.id } : undefined,
+              where: !isAdmin ? { contributor_id: user.id } : undefined,
             }),
           ]),
           ...this.validation.schema,
@@ -113,7 +117,7 @@ export default class QuestionsController {
         question,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -121,12 +125,18 @@ export default class QuestionsController {
     }
   }
 
-  public async delete({ response, params }: HttpContextContract) {
+  public async delete({ response, params, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     try {
-      const question = await Question.find(params.id)
+      const question = await Question.query().where('id', params.id).preload('quiz').first()
 
       if (!question) {
         return response.status(404).json({ success: false })
+      }
+
+      if (question.quiz.contributorId !== user.id && user.status !== 1000) {
+        return response.status(403).json({ success: false })
       }
 
       await question.delete()
@@ -136,7 +146,7 @@ export default class QuestionsController {
         question,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,

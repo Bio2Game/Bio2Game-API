@@ -9,7 +9,7 @@ export default class FormationsController {
       return { formations: [] }
     }
     let formations: Formation[]
-    if (auth.user instanceof User && auth.user.status > 999) {
+    if (auth.user instanceof User && auth.user.status === 1000) {
       formations = await Formation.query()
         .preload('author')
         .preload('quizzes')
