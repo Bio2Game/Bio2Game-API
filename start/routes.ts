@@ -135,11 +135,11 @@ Route.group(() => {
     }).prefix('/questions')
 
     Route.group(() => {
-      Route.get('/', 'FormationsController.list')
-      Route.get('/:id', 'FormationsController.show')
-      Route.post('/', 'FormationsController.store')
-      Route.patch('/:id', 'FormationsController.update')
-      Route.delete('/:id', 'FormationsController.delete')
+      Route.get('/', 'Contributor/FormationsController.list')
+      Route.get('/:id', 'Contributor/FormationsController.show')
+      Route.post('/', 'Contributor/FormationsController.store')
+      Route.patch('/:id', 'Contributor/FormationsController.update')
+      Route.delete('/:id', 'Contributor/FormationsController.delete')
     }).prefix('/formations')
   })
     .prefix('/contributor')
