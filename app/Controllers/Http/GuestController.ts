@@ -16,7 +16,7 @@ export default class AuthController {
       return token.toJSON()
     } catch (error) {
       console.log(error)
-      response.status(401).json({
+      return response.status(401).json({
         success: false,
         messages: error.messages || error,
       })
@@ -26,7 +26,7 @@ export default class AuthController {
   public async logout({ auth, response }: HttpContextContract) {
     await auth.use('guest').logout()
 
-    response.status(200).json({
+    return response.status(200).json({
       success: true,
       message: 'Vous êtes déconnecté avec succès',
     })

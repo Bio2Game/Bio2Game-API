@@ -68,14 +68,14 @@ export default class UsersController {
 
       if (animators) await user.related('animators').sync(animators)
 
-      response.status(200).json({
+      return response.status(200).json({
         success: true,
         message: 'Profil mis à jour avec succès',
       })
     } catch (error) {
       console.log(error)
 
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error: error,

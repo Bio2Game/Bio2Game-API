@@ -10,7 +10,7 @@ import ResetPassword from 'App/Emails/ResetPassword'
 export default class AuthController {
   public async user({ auth }: HttpContextContract) {
     const user = await auth.use('user').authenticate()
-    await user.load('donations')
+    if (user) await user.load('donations')
 
     return user ? user.toJSON() : false
   }
@@ -42,7 +42,7 @@ export default class AuthController {
 
       await User.create(payload)
 
-      response.status(200).json({
+      return response.status(200).json({
         success: true,
         message: 'Merci de vous être inscrit !',
       })
@@ -53,7 +53,7 @@ export default class AuthController {
           messages: error.messages,
         })
       }
-      response.status(500).json({
+      return response.status(500).json({
         success: false,
         messages: error.messages,
         error,
@@ -111,7 +111,7 @@ export default class AuthController {
           error: error,
         })
       }
-      response.status(401).json({
+      return response.status(401).json({
         success: false,
         messages: error.messages,
         error: error,
@@ -154,9 +154,9 @@ export default class AuthController {
       await auth.use('user').provider.updateRememberMeToken(userProvider)
 
       await new ResetPassword(
-        userProvider.user!.email,
+        userProvider.user.email,
         Encryption.encrypt({
-          id: userProvider.user!.id,
+          id: userProvider.user.id,
           token: userProvider.getRememberMeToken(),
         })
       ).sendLater()
@@ -253,7 +253,7 @@ export default class AuthController {
   public async logout({ auth, response }: HttpContextContract) {
     await auth.use('user').logout()
 
-    response.status(200).json({
+    return response.status(200).json({
       success: true,
       message: 'Vous êtes déconnecté avec succès',
     })

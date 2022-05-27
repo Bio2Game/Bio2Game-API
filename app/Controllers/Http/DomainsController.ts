@@ -16,7 +16,7 @@ export default class DomainsController {
       const domain = await Domain.find(params.id)
 
       if (!domain) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       return {
@@ -24,7 +24,7 @@ export default class DomainsController {
         domain,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -56,7 +56,7 @@ export default class DomainsController {
         domain,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -82,12 +82,12 @@ export default class DomainsController {
         await payload.image.move(Application.makePath('files/illustrations'), { name: imageName })
       }
 
-      domain?.merge({
+      domain.merge({
         ...payload,
         image: imageName,
       })
 
-      await domain?.save()
+      await domain.save()
 
       await domain.load('icon')
 
@@ -96,7 +96,7 @@ export default class DomainsController {
         domain,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -109,17 +109,17 @@ export default class DomainsController {
       const domain = await Domain.find(params.id)
 
       if (!domain) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
-      await domain?.delete()
+      await domain.delete()
 
       return {
         success: true,
         domain,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,

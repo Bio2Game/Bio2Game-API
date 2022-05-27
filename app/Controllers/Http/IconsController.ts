@@ -16,7 +16,7 @@ export default class IconsController {
       const icon = await Icon.find(params.id)
 
       if (!icon) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       return {
@@ -24,7 +24,7 @@ export default class IconsController {
         icon,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -61,7 +61,7 @@ export default class IconsController {
       }
     } catch (error) {
       console.error(error)
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -74,17 +74,17 @@ export default class IconsController {
       const icon = await Icon.find(params.id)
 
       if (!icon) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
-      await icon?.delete()
+      await icon.delete()
 
       return {
         success: true,
         icon,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,

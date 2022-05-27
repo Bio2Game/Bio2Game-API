@@ -12,7 +12,7 @@ export default class QuestionsController {
       const question = await Question.find(params.id)
 
       if (!question) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       return {
@@ -20,7 +20,7 @@ export default class QuestionsController {
         question,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,

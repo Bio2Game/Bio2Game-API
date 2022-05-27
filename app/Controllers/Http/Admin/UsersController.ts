@@ -14,7 +14,7 @@ export default class UsersController {
       const user = await User.find(params.id)
 
       if (!user) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
       return {
@@ -22,7 +22,7 @@ export default class UsersController {
         user,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -71,14 +71,14 @@ export default class UsersController {
 
       await user.save()
 
-      response.status(200).json({
+      return response.status(200).json({
         success: true,
         user,
       })
     } catch (error) {
       console.log(error)
 
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -91,17 +91,17 @@ export default class UsersController {
       const user = await User.find(params.id)
 
       if (!user) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
       }
 
-      await user?.delete()
+      await user.delete()
 
       return {
         success: true,
         user,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
