@@ -7,22 +7,27 @@ import Question from 'App/Models/Question'
 enum Languages {
   FR = 'fr',
   EN = 'en',
+  JP = 'jp',
+  AR = 'ar',
+  DE = 'de',
+  ES = 'es',
+  IT = 'it',
+  MAR = 'mar',
 }
 
 export default class QuizzesController {
   public async index({ auth }: HttpContextContract) {
-    if (!auth.user) {
-      return { quizzes: [] }
-    }
-    let quizzes
-    if (auth.user instanceof User && auth.user!.status > 999) {
+    const user = auth.user as User
+
+    let quizzes: Quiz[]
+    if (user.status === 1000) {
       quizzes = await Quiz.query()
         .preload('author')
         .preload('domain', (query) => query.preload('icon'))
         .preload('questions')
     } else {
       quizzes = await Quiz.query()
-        .where('contributor_id', auth.user.id)
+        .where('contributor_id', user.id)
         .preload('domain', (query) => query.preload('icon'))
         .preload('questions')
     }
@@ -37,12 +42,18 @@ export default class QuizzesController {
     }
   }
 
-  public async show({ response, params }: HttpContextContract) {
+  public async show({ response, params, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     try {
       const quiz = await Quiz.find(params.id)
 
       if (!quiz) {
-        response.status(404).json({ success: false })
+        return response.status(404).json({ success: false })
+      }
+
+      if (quiz.contributorId !== user.id && user.status !== 1000) {
+        return response.status(403).json({ success: false })
       }
 
       return {
@@ -50,7 +61,7 @@ export default class QuizzesController {
         quiz,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -58,7 +69,9 @@ export default class QuizzesController {
     }
   }
 
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     try {
       const payload = await request.validate({
         schema: schema.create({
@@ -71,6 +84,10 @@ export default class QuizzesController {
         messages: this.validation.messages,
       })
 
+      if (payload.contributorId !== user.id && user.status !== 1000) {
+        return response.status(403).json({ success: false })
+      }
+
       const quiz = await Quiz.create(payload)
 
       return {
@@ -78,7 +95,7 @@ export default class QuizzesController {
         quiz,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -86,12 +103,18 @@ export default class QuizzesController {
     }
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
+  public async update({ request, response, params, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     try {
       const quiz = await Quiz.find(params.id)
 
       if (!quiz) {
         return response.status(404).json({ success: false })
+      }
+
+      if (quiz.contributorId !== user.id && user.status !== 1000) {
+        return response.status(403).json({ success: false })
       }
 
       const payload = await request.validate({
@@ -114,7 +137,7 @@ export default class QuizzesController {
         quiz,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -123,6 +146,8 @@ export default class QuizzesController {
   }
 
   public async updateOrder({ auth, request, response, params }: HttpContextContract) {
+    const user = auth.user as User
+
     try {
       const quiz = await Quiz.find(params.id)
 
@@ -130,8 +155,8 @@ export default class QuizzesController {
         return response.status(404).json({ success: false })
       }
 
-      if (quiz.contributorId !== auth.user?.id) {
-        response.status(403).json({ success: false })
+      if (quiz.contributorId !== user.id && user.status !== 1000) {
+        return response.status(403).json({ success: false })
       }
 
       const questions = await Promise.all(
@@ -155,7 +180,7 @@ export default class QuizzesController {
         quiz_id: quiz.id,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -164,6 +189,8 @@ export default class QuizzesController {
   }
 
   public async delete({ response, params, auth }: HttpContextContract) {
+    const user = auth.user as User
+
     try {
       const quiz = await Quiz.find(params.id)
 
@@ -171,7 +198,7 @@ export default class QuizzesController {
         return response.status(404).json({ success: false })
       }
 
-      if (quiz.contributorId !== auth?.user?.id) {
+      if (quiz.contributorId !== user.id && user.status !== 1000) {
         return response.status(403).json({ success: false })
       }
 
@@ -182,7 +209,7 @@ export default class QuizzesController {
         quiz,
       }
     } catch (error) {
-      response.status(422).json({
+      return response.status(422).json({
         success: false,
         messages: error.messages,
         error,
@@ -219,6 +246,7 @@ export default class QuizzesController {
         'contributorId.exists': "Ce contributeur n'existe pas.",
         'domainId.required': "Veuillez renseigner l'id du domaine associé.",
         'domainId.exists': "Ce domaine n'existe pas.",
+        'language.required': 'Veuillez renseigner la langue du quiz.',
         'level.required': 'Veuillez renseigner le niveau du public.',
         'localisation.maxLength':
           'Votre localisation ne peux pas dépasser {{ options.maxLength }} caractères.',
