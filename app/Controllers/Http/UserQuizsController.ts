@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { QuestionStatus } from 'App/Models/Question'
 
-import Quiz from 'App/Models/Quiz'
+import Quiz, { QuizStatus } from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
 
 export default class UserQuizsController {
@@ -19,10 +19,8 @@ export default class UserQuizsController {
     }
 
     const quiz = await Quiz.query()
-      .where({
-        status: 1,
-        id: params.id,
-      })
+      .where('status', '!=', QuizStatus.Private)
+      .where('id', params.id)
       .preload('questions', (query) =>
         params.type === 'quiz'
           ? query
