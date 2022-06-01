@@ -7,8 +7,8 @@ import User from 'App/Models/User'
 
 export enum QuizStatus {
   Dev,
-  Private,
   Public,
+  Private,
 }
 
 export default class Quiz extends BaseModel {
