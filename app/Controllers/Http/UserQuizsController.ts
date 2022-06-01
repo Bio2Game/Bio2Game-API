@@ -19,7 +19,7 @@ export default class UserQuizsController {
     }
 
     const quiz = await Quiz.query()
-      .where('status', '!=', QuizStatus.Private)
+      .where('status', '!=', QuizStatus.Dev)
       .where('id', params.id)
       .preload('questions', (query) =>
         params.type === 'quiz'
