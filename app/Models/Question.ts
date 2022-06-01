@@ -5,7 +5,7 @@ import Quiz from 'App/Models/Quiz'
 import Response from 'App/Models/Response'
 
 export enum QuestionStatus {
-  Private,
+  Hidden,
   Public,
 }
 
